@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Navbar from "./component/navbar/page";
 import HeroSection from "./component/heroSection/page";
-import FooterSection from "./component/footer/page";
+
 import FeaturedProducts from "./component/featuredProducts/page";
 import WhyChooseUs from "./component/whyChooseUs/page";
 
@@ -12,7 +12,7 @@ export default function Home() {
      <HeroSection></HeroSection>
      <FeaturedProducts></FeaturedProducts>
      <WhyChooseUs></WhyChooseUs>
-     <FooterSection></FooterSection>
+    
      
     
    </div>

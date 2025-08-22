@@ -1,68 +1,111 @@
-"use client"
-import React, { useState } from 'react'
-import { Eye, EyeOff, Mail, Lock, User, Phone, Github, Chrome, UserPlus, Check } from 'lucide-react'
-import SocialLogin from '../../component/socialLogin/page'
-import Link from 'next/link'
+"use client";
+import React, { useState } from "react";
+import {
+  Eye,
+  EyeOff,
+  Mail,
+  Lock,
+  User,
+  Phone,
+  Github,
+  Chrome,
+  UserPlus,
+  Check,
+} from "lucide-react";
+import SocialLogin from "../../component/socialLogin/page";
+import Link from "next/link";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+
 
 export default function RegisterPage() {
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const router = useRouter()
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    password: '',
-    confirmPassword: ''
-  })
-  const [isLoading, setIsLoading] = useState(false)
-  const [agreedToTerms, setAgreedToTerms] = useState(false)
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+   
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target
-    setFormData(prev => ({
+    const { name, value } = e.target;
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
-    }))
-  }
+      [name]: value,
+    }));
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsLoading(true)
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2500))
-    setIsLoading(false)
-    console.log('Registration attempt:', formData)
-  }
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        console.log("✅ Registration success:", data);
+         toast.success("✅ Registration successful!");
+        router.push("/auth/login");
+      } else {
+        console.error("❌ Registration failed:", data.message);
+      }
+    } catch (error) {
+      console.error("❌ Error:", error);
+    }
+
+    setIsLoading(false);
+  };
 
   const passwordStrength = (password) => {
-    let strength = 0
-    if (password.length >= 8) strength++
-    if (/[A-Z]/.test(password)) strength++
-    if (/[0-9]/.test(password)) strength++
-    if (/[^A-Za-z0-9]/.test(password)) strength++
-    return strength
-  }
+    let strength = 0;
+    if (password.length >= 8) strength++;
+    if (/[A-Z]/.test(password)) strength++;
+    if (/[0-9]/.test(password)) strength++;
+    if (/[^A-Za-z0-9]/.test(password)) strength++;
+    return strength;
+  };
 
   const getPasswordStrengthColor = (strength) => {
     switch (strength) {
-      case 0: case 1: return 'bg-red-500'
-      case 2: return 'bg-yellow-500'
-      case 3: return 'bg-blue-500'
-      case 4: return 'bg-green-500'
-      default: return 'bg-gray-300'
+      case 0:
+      case 1:
+        return "bg-red-500";
+      case 2:
+        return "bg-yellow-500";
+      case 3:
+        return "bg-blue-500";
+      case 4:
+        return "bg-green-500";
+      default:
+        return "bg-gray-300";
     }
-  }
+  };
 
   const getPasswordStrengthText = (strength) => {
     switch (strength) {
-      case 0: case 1: return 'Weak'
-      case 2: return 'Fair'
-      case 3: return 'Good'
-      case 4: return 'Strong'
-      default: return ''
+      case 0:
+      case 1:
+        return "Weak";
+      case 2:
+        return "Fair";
+      case 3:
+        return "Good";
+      case 4:
+        return "Strong";
+      default:
+        return "";
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-900 via-teal-900 to-cyan-800 flex items-center justify-center p-4 py-12">
@@ -85,15 +128,14 @@ export default function RegisterPage() {
             <p className="text-gray-300">Join us and start your journey</p>
           </div>
 
-         
-
-       
           {/* Registration Form */}
           <div className="space-y-4">
             {/* Name Fields */}
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
-                <label className="text-sm font-medium text-gray-200">First Name</label>
+                <label className="text-sm font-medium text-gray-200">
+                  First Name
+                </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <User className="h-4 w-4 text-gray-400" />
@@ -110,7 +152,9 @@ export default function RegisterPage() {
                 </div>
               </div>
               <div className="space-y-1">
-                <label className="text-sm font-medium text-gray-200">Last Name</label>
+                <label className="text-sm font-medium text-gray-200">
+                  Last Name
+                </label>
                 <div className="relative">
                   <input
                     type="text"
@@ -127,7 +171,9 @@ export default function RegisterPage() {
 
             {/* Email Field */}
             <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-200">Email Address</label>
+              <label className="text-sm font-medium text-gray-200">
+                Email Address
+              </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Mail className="h-4 w-4 text-gray-400" />
@@ -144,11 +190,11 @@ export default function RegisterPage() {
               </div>
             </div>
 
-          
-
             {/* Password Field */}
             <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-200">Password</label>
+              <label className="text-sm font-medium text-gray-200">
+                Password
+              </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Lock className="h-4 w-4 text-gray-400" />
@@ -167,7 +213,11 @@ export default function RegisterPage() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-white transition-colors duration-200"
                 >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
                 </button>
               </div>
               {/* Password Strength Indicator */}
@@ -179,25 +229,33 @@ export default function RegisterPage() {
                         key={level}
                         className={`h-1 flex-1 rounded-full transition-all duration-200 ${
                           passwordStrength(formData.password) >= level
-                            ? getPasswordStrengthColor(passwordStrength(formData.password))
-                            : 'bg-gray-600'
+                            ? getPasswordStrengthColor(
+                                passwordStrength(formData.password)
+                              )
+                            : "bg-gray-600"
                         }`}
                       />
                     ))}
                   </div>
-                  <p className={`text-xs ${
-                    passwordStrength(formData.password) <= 1 ? 'text-red-400' :
-                    passwordStrength(formData.password) === 2 ? 'text-yellow-400' :
-                    passwordStrength(formData.password) === 3 ? 'text-blue-400' :
-                    'text-green-400'
-                  }`}>
-                    Password strength: {getPasswordStrengthText(passwordStrength(formData.password))}
+                  <p
+                    className={`text-xs ${
+                      passwordStrength(formData.password) <= 1
+                        ? "text-red-400"
+                        : passwordStrength(formData.password) === 2
+                        ? "text-yellow-400"
+                        : passwordStrength(formData.password) === 3
+                        ? "text-blue-400"
+                        : "text-green-400"
+                    }`}
+                  >
+                    Password strength:{" "}
+                    {getPasswordStrengthText(
+                      passwordStrength(formData.password)
+                    )}
                   </p>
                 </div>
               )}
             </div>
-
-           
 
             {/* Terms & Conditions */}
             <div className="flex items-start space-x-2">
@@ -213,19 +271,22 @@ export default function RegisterPage() {
                   onClick={() => setAgreedToTerms(!agreedToTerms)}
                   className={`w-5 h-5 rounded border-2 cursor-pointer transition-all duration-200 flex items-center justify-center ${
                     agreedToTerms
-                      ? 'bg-emerald-500 border-emerald-500'
-                      : 'border-white/40 hover:border-emerald-400'
+                      ? "bg-emerald-500 border-emerald-500"
+                      : "border-white/40 hover:border-emerald-400"
                   }`}
                 >
                   {agreedToTerms && <Check className="w-3 h-3 text-white" />}
                 </div>
               </div>
-              <label htmlFor="terms" className="text-sm text-gray-300 cursor-pointer">
-                I agree to the{' '}
+              <label
+                htmlFor="terms"
+                className="text-sm text-gray-300 cursor-pointer"
+              >
+                I agree to the{" "}
                 <button className="text-emerald-300 hover:text-emerald-200 underline">
                   Terms of Service
-                </button>{' '}
-                and{' '}
+                </button>{" "}
+                and{" "}
                 <button className="text-emerald-300 hover:text-emerald-200 underline">
                   Privacy Policy
                 </button>
@@ -236,7 +297,10 @@ export default function RegisterPage() {
             <button
               type="button"
               onClick={handleSubmit}
-              disabled={isLoading || !agreedToTerms || formData.password !== formData.confirmPassword}
+              disabled={
+                isLoading ||
+                !agreedToTerms
+              }
               className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
               {isLoading ? (
@@ -245,7 +309,7 @@ export default function RegisterPage() {
                   <span>Creating Account...</span>
                 </div>
               ) : (
-                'Create Account'
+                "Create Account"
               )}
             </button>
           </div>
@@ -253,23 +317,25 @@ export default function RegisterPage() {
           {/* Sign In Link */}
           <div className="text-center">
             <p className="text-gray-300">
-              Already have an account?{' '}
+              Already have an account?{" "}
               <button className="text-emerald-300 hover:text-emerald-200 font-medium transition-colors duration-200">
                 <Link href="/auth/login">Sign in</Link>
               </button>
             </p>
           </div>
 
-             {/* Divider */}
+          {/* Divider */}
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-white/20"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-gradient-to-br from-emerald-900 via-teal-900 to-cyan-800 text-gray-300">Or create with email</span>
+              <span className="px-2 bg-gradient-to-br from-emerald-900 via-teal-900 to-cyan-800 text-gray-300">
+                Or create with email
+              </span>
             </div>
           </div>
-            <SocialLogin></SocialLogin>
+          <SocialLogin></SocialLogin>
         </div>
       </div>
 
@@ -282,5 +348,5 @@ export default function RegisterPage() {
         }
       `}</style>
     </div>
-  )
+  );
 }

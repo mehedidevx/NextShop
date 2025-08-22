@@ -255,7 +255,8 @@ export default function FooterSection() {
                 </h4>
 
                 {/* Links */}
-                <div className={`space-y-3 ${expandedSections[section.title] || window.innerWidth >= 1024 ? 'block' : 'hidden'} lg:block`}>
+               <div className={`space-y-3 ${expandedSections[section.title] || (typeof window !== 'undefined' && window.innerWidth >= 1024) ? 'block' : 'hidden'} lg:block`}>
+
                   {section.links.map((link, linkIndex) => (
                     <a
                       key={linkIndex}

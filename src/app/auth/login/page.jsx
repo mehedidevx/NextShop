@@ -4,21 +4,38 @@ import React, { useState } from 'react'
 import { Eye, EyeOff, Mail, Lock, Github, Chrome } from 'lucide-react'
 import Link from 'next/link'
 import SocialLogin from '../../component/socialLogin/page'
+import { useRouter } from 'next/navigation'
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsLoading(true)
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    setIsLoading(false)
-    console.log('Login attempt:', { email, password })
+const handleSubmit = async (e) => {
+  e.preventDefault()
+  setIsLoading(true)
+  try {
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    })
+    const data = await res.json()
+    if (res.ok) {
+      console.log('✅ Login success:', data)
+      // চাইলে redirect করো
+      router.push('/') // এখানে dashboard এর path দিন
+      // router.push('/dashboard') (useRouter import করতে হবে)
+    } else {
+      console.error('❌ Login failed:', data.message)
+    }
+  } catch (err) {
+    console.error('❌ Error:', err)
   }
+  setIsLoading(false)
+}
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 flex items-center justify-center p-4">
