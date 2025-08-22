@@ -28,7 +28,7 @@ export default function HeroSection() {
       image: "🌟"
     },
     {
-      title: "New Arrivals Weekly",
+      title: "New Arrivals Weekly Exclusive",
       subtitle: "Stay Ahead with Latest Trends",
       gradient: "from-indigo-600 via-purple-500 to-pink-500",
       image: "🚀"
