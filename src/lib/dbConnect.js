@@ -1,6 +1,12 @@
 // lib/dbConnect.js
 import { MongoClient, ServerApiVersion } from "mongodb";
 
+export const collectionNames = {
+    user: "user",
+    products: "products"
+}
+
+
 const uri = process.env.MONGODB_URI;
 const options = {
   serverApi: {
