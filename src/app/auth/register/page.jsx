@@ -12,7 +12,7 @@ import {
   UserPlus,
   Check,
 } from "lucide-react";
-import SocialLogin from "../../component/socialLogin/page";
+import SocialLogin from "../../component/socialLogin/socialLogin";
 import Link from "next/link";
 
 import { useRouter } from "next/navigation";

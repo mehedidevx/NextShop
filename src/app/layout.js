@@ -6,7 +6,7 @@ import { Toaster } from "react-hot-toast";
 import NextAuthProvider from "@/Providers/NextAuthProvider";
 import Navbar from "./component/navbar/Navbar";
 import { ToastContainer } from "react-toastify";
-import FooterSection from "./component/footer/page";
+import FooterSection from "./component/footer/footer";
 
 
 const geistSans = Geist({

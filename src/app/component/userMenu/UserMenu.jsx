@@ -1,6 +1,7 @@
 "use client";
 
-import { useAuth } from "../../../context/AuthContext";
+
+import { useAuth } from "@/context/AuthContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import Link from "next/link";

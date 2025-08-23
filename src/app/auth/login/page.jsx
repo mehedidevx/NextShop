@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Eye, EyeOff, Mail, Lock, Github, Chrome } from "lucide-react";
 import Link from "next/link";
-import SocialLogin from "../../component/socialLogin/page";
+import SocialLogin from "../../component/socialLogin/socialLogin";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { toast } from "react-toastify";
