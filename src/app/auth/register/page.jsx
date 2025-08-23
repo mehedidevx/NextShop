@@ -14,8 +14,11 @@ import {
 } from "lucide-react";
 import SocialLogin from "../../component/socialLogin/page";
 import Link from "next/link";
-import toast from "react-hot-toast";
+
 import { useRouter } from "next/navigation";
+import { registerUser } from "@/app/actions/auth/registerUser";
+import { toast } from "react-toastify";
+
 
 
 export default function RegisterPage() {
@@ -23,8 +26,7 @@ export default function RegisterPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter()
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    name: "",
     email: "",
     password: "",
    
@@ -44,24 +46,30 @@ export default function RegisterPage() {
     e.preventDefault();
     setIsLoading(true);
 
-    try {
-      const res = await fetch("/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+   
+        // Simulate API call
+        // await new Promise(resolve => setTimeout(resolve, 1000));
+        const { name, email, password } = formData;
+        const payload = { name, email, password }
+        console.log(name, email, password);
+        const response = await registerUser(payload);
+        console.log(response);
+        setIsLoading(false)
 
-      const data = await res.json();
-      if (res.ok) {
-        console.log("✅ Registration success:", data);
-         toast.success("✅ Registration successful!");
-        router.push("/auth/login");
-      } else {
-        console.error("❌ Registration failed:", data.message);
-      }
-    } catch (error) {
-      console.error("❌ Error:", error);
-    }
+
+        if (response.success === true) {
+            toast.success('Registered in successfully')
+            // setFormData({ email: "", password: '' })
+            // setFormErrors({});
+            setShowPassword(false);
+            console.log(response)
+            router.push('/')
+        }
+        else {
+            toast.warn('Authentication failed')
+            setIsLoading(false);
+            return
+        }
 
     setIsLoading(false);
   };
@@ -134,7 +142,7 @@ export default function RegisterPage() {
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
                 <label className="text-sm font-medium text-gray-200">
-                  First Name
+                  Name
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -142,8 +150,8 @@ export default function RegisterPage() {
                   </div>
                   <input
                     type="text"
-                    name="firstName"
-                    value={formData.firstName}
+                    name="name"
+                    value={formData.name}
                     onChange={handleInputChange}
                     className="w-full pl-9 pr-3 py-2.5 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent transition-all duration-200 text-sm"
                     placeholder="John"
@@ -151,22 +159,7 @@ export default function RegisterPage() {
                   />
                 </div>
               </div>
-              <div className="space-y-1">
-                <label className="text-sm font-medium text-gray-200">
-                  Last Name
-                </label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleInputChange}
-                    className="w-full pl-3 pr-3 py-2.5 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent transition-all duration-200 text-sm"
-                    placeholder="Doe"
-                    required
-                  />
-                </div>
-              </div>
+             
             </div>
 
             {/* Email Field */}

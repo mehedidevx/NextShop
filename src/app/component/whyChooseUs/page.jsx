@@ -4,6 +4,7 @@ import { Award, Shield, Headphones, Truck, RefreshCw, Users, Zap } from 'lucide-
 
 export default function WhyChooseUs() {
   const [isVisible, setIsVisible] = useState(false)
+  const [floatingShapes, setFloatingShapes] = useState([]) // client-only shapes
 
   // Why Choose Us Data
   const whyChooseFeatures = [
@@ -54,17 +55,25 @@ export default function WhyChooseUs() {
   // Scroll detection for animations
   useEffect(() => {
     const handleScroll = () => {
-      const scrollY = window.scrollY
-      const windowHeight = window.innerHeight
-      
-      if (scrollY > windowHeight * 0.6) {
+      if (window.scrollY > window.innerHeight * 0.6) {
         setIsVisible(true)
       }
     }
-
-    handleScroll() // Check initial position
+    handleScroll()
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  // Generate floating shapes only on client
+  useEffect(() => {
+    const shapes = [...Array(8)].map((_, i) => ({
+      id: i,
+      left: `${10 + (i * 12)}%`,
+      top: `${20 + (i % 3) * 30}%`,
+      delay: `${i * 0.7}s`,
+      duration: `${(4 + Math.random() * 2).toFixed(2)}s`
+    }))
+    setFloatingShapes(shapes)
   }, [])
 
   return (
@@ -78,15 +87,15 @@ export default function WhyChooseUs() {
 
       {/* Floating Geometric Shapes */}
       <div className="absolute inset-0 overflow-hidden">
-        {[...Array(8)].map((_, i) => (
+        {floatingShapes.map((shape) => (
           <div
-            key={i}
+            key={shape.id}
             className="absolute w-4 h-4 border-2 border-white/10 rotate-45 animate-float"
             style={{
-              left: `${10 + (i * 12)}%`,
-              top: `${20 + (i % 3) * 30}%`,
-              animationDelay: `${i * 0.7}s`,
-              animationDuration: `${4 + Math.random() * 2}s`
+              left: shape.left,
+              top: shape.top,
+              animationDelay: shape.delay,
+              animationDuration: shape.duration
             }}
           />
         ))}
@@ -119,21 +128,15 @@ export default function WhyChooseUs() {
               }`}
               style={{ animationDelay: feature.delay }}
             >
-              
-              {/* Icon */}
               <div className={`w-16 h-16 bg-gradient-to-r ${feature.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}>
                 <feature.icon className="w-8 h-8 text-white" />
               </div>
-
-              {/* Content */}
               <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-yellow-400 transition-colors">
                 {feature.title}
               </h3>
               <p className="text-gray-300 leading-relaxed">
                 {feature.description}
               </p>
-
-              {/* Hover Effect Border */}
               <div className={`absolute inset-0 rounded-3xl bg-gradient-to-r ${feature.color} opacity-0 group-hover:opacity-20 transition-opacity duration-500 -z-10`}></div>
             </div>
           ))}

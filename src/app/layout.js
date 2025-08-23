@@ -1,9 +1,12 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "./component/navbar/page";
-import FooterSection from "./component/footer/page";
+
+
 import { Toaster } from "react-hot-toast";
-import { AuthProvider } from "../context/AuthContext";
+import NextAuthProvider from "@/Providers/NextAuthProvider";
+import Navbar from "./component/navbar/Navbar";
+import { ToastContainer } from "react-toastify";
+import FooterSection from "./component/footer/page";
 
 
 const geistSans = Geist({
@@ -28,12 +31,12 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {/* AuthProvider দিয়ে整个 app কে wrap করুন */}
-        <AuthProvider>
-          <Navbar />
+        <NextAuthProvider>
+         <Navbar></Navbar>
           <main>{children}</main>
-          <Toaster />
+          <ToastContainer />
           <FooterSection />
-        </AuthProvider>
+        </NextAuthProvider>
       </body>
     </html>
   );

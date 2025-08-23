@@ -1,41 +1,54 @@
-"use client"
+"use client";
 
-import React, { useState } from 'react'
-import { Eye, EyeOff, Mail, Lock, Github, Chrome } from 'lucide-react'
-import Link from 'next/link'
-import SocialLogin from '../../component/socialLogin/page'
-import { useRouter } from 'next/navigation'
+import React, { useState } from "react";
+import { Eye, EyeOff, Mail, Lock, Github, Chrome } from "lucide-react";
+import Link from "next/link";
+import SocialLogin from "../../component/socialLogin/page";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
+import { toast } from "react-toastify";
 
 export default function LoginPage() {
-  const [showPassword, setShowPassword] = useState(false)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
-const handleSubmit = async (e) => {
-  e.preventDefault()
-  setIsLoading(true)
-  try {
-    const res = await fetch('/api/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
-    })
-    const data = await res.json()
-    if (res.ok) {
-      console.log('✅ Login success:', data)
-      // চাইলে redirect করো
-      router.push('/') // এখানে dashboard এর path দিন
-      // router.push('/dashboard') (useRouter import করতে হবে)
-    } else {
-      console.error('❌ Login failed:', data.message)
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      const { email, password } = formData;
+      console.log(email, password);
+      const response = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+      });
+
+      if (response.ok) {
+        toast.success("Logged in successfully");
+        setFormData({ email: "", password: "" });
+        // setFormErrors({});
+        setIsLoading(false);
+        setShowPassword(false);
+        router.push("/");
+      } else {
+        toast.warn("Authentication failed");
+        setIsLoading(false);
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+      alert("Authentication failed");
     }
-  } catch (err) {
-    console.error('❌ Error:', err)
-  }
-  setIsLoading(false)
-}
+    setIsLoading(false);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 flex items-center justify-center p-4">
@@ -58,8 +71,6 @@ const handleSubmit = async (e) => {
             <p className="text-gray-300">Sign in to your account</p>
           </div>
 
-         
-
           {/* Login Form */}
           <div className="space-y-6">
             {/* Email Field */}
@@ -71,8 +82,11 @@ const handleSubmit = async (e) => {
                 </div>
                 <input
                   type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={formData.email}
+                  name="email"
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
                   className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-200"
                   placeholder="Enter your email"
                   required
@@ -82,15 +96,20 @@ const handleSubmit = async (e) => {
 
             {/* Password Field */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-200">Password</label>
+              <label className="text-sm font-medium text-gray-200">
+                Password
+              </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Lock className="h-5 w-5 text-gray-400" />
                 </div>
                 <input
                   type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={formData.password}
+                  name="password"
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
                   className="w-full pl-10 pr-12 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-200"
                   placeholder="Enter your password"
                   required
@@ -100,7 +119,11 @@ const handleSubmit = async (e) => {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-white transition-colors duration-200"
                 >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
                 </button>
               </div>
             </div>
@@ -135,7 +158,7 @@ const handleSubmit = async (e) => {
                   <span>Signing in...</span>
                 </div>
               ) : (
-                'Sign In'
+                "Sign In"
               )}
             </button>
           </div>
@@ -143,27 +166,27 @@ const handleSubmit = async (e) => {
           {/* Sign Up Link */}
           <div className="text-center">
             <p className="text-gray-300">
-              Don't have an account?{' '}
+              Don't have an account?{" "}
               <button className="text-purple-300 hover:text-purple-200 font-medium transition-colors duration-200">
-               <Link href="/auth/register"> Sign up</Link>
+                <Link href="/auth/register"> Sign up</Link>
               </button>
             </p>
           </div>
 
-            {/* Divider */}
+          {/* Divider */}
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-white/20"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 text-gray-300">Or continue with</span>
+              <span className="px-2 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 text-gray-300">
+                Or continue with
+              </span>
             </div>
           </div>
 
-           {/* Social Login Buttons */}
-           <SocialLogin></SocialLogin>
-
-        
+          {/* Social Login Buttons */}
+          <SocialLogin></SocialLogin>
         </div>
       </div>
 
@@ -176,5 +199,5 @@ const handleSubmit = async (e) => {
         }
       `}</style>
     </div>
-  )
+  );
 }
