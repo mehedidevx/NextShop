@@ -71,7 +71,7 @@ export default function HeroSection() {
   ];
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900">
+    <div className="relative min-h-screen overflow-hidden bg-">
       {/* Animated Background Elements */}
       <div className="absolute inset-0">
         <div className="absolute top-20 left-10 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
@@ -84,7 +84,7 @@ export default function HeroSection() {
         {floatingItems.map((item, i) => (
           <div
             key={i}
-            className="absolute w-4 h-4 bg-gradient-to-r from-white to-purple-200 rounded-full animate-float opacity-60"
+            className="absolute w-4 h-4 bg rounded-full animate-float opacity-60"
             style={{
               left: item.left,
               top: item.top,
@@ -107,7 +107,7 @@ export default function HeroSection() {
             {/* Badge */}
             <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-lg rounded-full px-6 py-2 border border-white/10">
               <Zap className="w-4 h-4 text-yellow-400" />
-              <span className="text-white font-medium text-sm">New Features Available</span>
+              <span className=" font-semibold text-sm">New Features Available</span>
             </div>
 
             {/* Main Heading */}
@@ -119,9 +119,9 @@ export default function HeroSection() {
                   NextShop
                 </span>
                 <br />
-                <span className="text-white">{heroSlides[currentSlide].title}</span>
+                <span className="">{heroSlides[currentSlide].title}</span>
               </h1>
-              <p className="text-xl text-gray-300 max-w-lg leading-relaxed">
+              <p className="text-xl text-base-content/50 max-w-lg leading-relaxed">
                 {heroSlides[currentSlide].subtitle}
               </p>
             </div>
@@ -131,13 +131,13 @@ export default function HeroSection() {
               {features.map((feature, index) => (
                 <div
                   key={index}
-                  className={`flex flex-col items-center p-4 bg-white/5 backdrop-blur-lg rounded-2xl border border-white/10 hover:bg-white/10 transition-all duration-300 hover:scale-105 ${
+                  className={`flex flex-col items-center p-4 bg-base-100 backdrop-blur-lg rounded-2xl border border-base-content/20 hover:bg-white/10 transition-all duration-300 hover:scale-105 ${
                     isVisible ? "animate-fade-in-up" : "opacity-0"
                   }`}
                   style={{ animationDelay: `${index * 200}ms` }}
                 >
                   <feature.icon className={`w-6 h-6 ${feature.color} mb-2`} />
-                  <span className="text-white text-sm font-medium text-center">{feature.text}</span>
+                  <span className="text-sm font-medium text-center">{feature.text}</span>
                 </div>
               ))}
             </div>
@@ -150,7 +150,7 @@ export default function HeroSection() {
                 <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
               </button>
 
-              <button className="group bg-white/10 hover:bg-white/20 backdrop-blur-lg text-white font-bold py-4 px-8 rounded-2xl border border-white/20 transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2">
+              <button className="group bg-base-100/5 hover:bg-white/20 backdrop-blur-lg  font-bold py-4 px-8 rounded-2xl border border-base-content/10 transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2">
                 <Play className="w-5 h-5" />
                 <span>Watch Demo</span>
               </button>
@@ -161,14 +161,14 @@ export default function HeroSection() {
               {stats.map((stat, index) => (
                 <div
                   key={index}
-                  className={`text-center p-4 bg-white/5 backdrop-blur-lg rounded-xl border border-white/10 hover:bg-white/10 transition-all duration-300 ${
+                  className={`text-center p-4 bg-white/5 backdrop-blur-lg rounded-xl border border-base-content/10 hover:bg-white/10 transition-all duration-300 ${
                     isVisible ? "animate-fade-in-up" : "opacity-0"
                   }`}
                   style={{ animationDelay: `${800 + index * 100}ms` }}
                 >
                   <div className="text-2xl mb-2">{stat.icon}</div>
-                  <div className="text-2xl font-bold text-white mb-1">{stat.number}</div>
-                  <div className="text-sm text-gray-300">{stat.label}</div>
+                  <div className="text-2xl font-bold  mb-1">{stat.number}</div>
+                  <div className="text-sm text-base-content/80">{stat.label}</div>
                 </div>
               ))}
             </div>

@@ -36,7 +36,7 @@ export const authOptions = {
             if (account) {
                 const { providerAccountId, provider } = account;
                 const { email: user_email, image, name } = user;
-                const usersCollection = dbConnect(collectionName.USERS);
+                const usersCollection = dbConnect(collectionName.users);
                 const isExist = await usersCollection.findOne({ providerAccountId })
                 if (!isExist) {
                     const payload = { providerAccountId, provider, user_email, image, name }

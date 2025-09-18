@@ -4,9 +4,10 @@ import "./globals.css";
 
 import { Toaster } from "react-hot-toast";
 import NextAuthProvider from "@/Providers/NextAuthProvider";
-import Navbar from "./component/navbar/Navbar";
+
 import { ToastContainer } from "react-toastify";
-import FooterSection from "./component/footer/footer";
+import FooterSection from "../component/footer/footer";
+import Navbar from "../component/navbar/Navbar";
 
 
 const geistSans = Geist({
@@ -30,7 +31,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {/* AuthProvider দিয়ে整个 app কে wrap করুন */}
+       
         <NextAuthProvider>
          <Navbar></Navbar>
           <main>{children}</main>

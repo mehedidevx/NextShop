@@ -39,7 +39,7 @@ export default function ContactPage() {
       title: "Call Us",
       info: "+1 (555) 123-4567",
       subInfo: "Mon-Fri 9AM-6PM EST",
-      gradient: "from-emerald-500 to-teal-500",
+      gradient: "from-success to-success",
       action: "tel:+15551234567"
     },
     {
@@ -47,7 +47,7 @@ export default function ContactPage() {
       title: "Email Us",
       info: "hello@nextshop.com",
       subInfo: "We reply within 24 hours",
-      gradient: "from-purple-500 to-pink-500",
+      gradient: "from-primary to-secondary",
       action: "mailto:hello@nextshop.com"
     },
     {
@@ -55,7 +55,7 @@ export default function ContactPage() {
       title: "Visit Us",
       info: "123 Commerce Street",
       subInfo: "New York, NY 10001",
-      gradient: "from-blue-500 to-cyan-500",
+      gradient: "from-info to-info",
       action: "#"
     },
     {
@@ -63,7 +63,7 @@ export default function ContactPage() {
       title: "Business Hours",
       info: "Mon-Fri: 9AM-6PM",
       subInfo: "Sat-Sun: 10AM-4PM",
-      gradient: "from-orange-500 to-red-500",
+      gradient: "from-warning to-error",
       action: "#"
     }
   ]
@@ -114,12 +114,12 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900">
+    <div className="min-h-screen ">
       {/* Animated Background */}
       <div className="absolute inset-0">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
-        <div className="absolute top-40 right-10 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-2000"></div>
-        <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-96 h-96 bg-indigo-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-4000"></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-primary rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
+        <div className="absolute top-40 right-10 w-80 h-80 bg-secondary rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-2000"></div>
+        <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-96 h-96 bg-accent rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-4000"></div>
       </div>
 
       {/* Floating Elements */}
@@ -127,7 +127,7 @@ export default function ContactPage() {
         {[...Array(10)].map((_, i) => (
           <div
             key={i}
-            className={`absolute w-3 h-3 bg-gradient-to-r from-white to-purple-200 rounded-full animate-float opacity-30`}
+            className={`absolute w-3 h-3 bg-gradient-to-r from-base-content to-primary rounded-full animate-float opacity-30`}
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -142,18 +142,18 @@ export default function ContactPage() {
         
         {/* Hero Section */}
         <div className={`text-center mb-16 mt-10 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-lg rounded-full px-6 py-2 border border-white/10 mb-6">
-            <MessageCircle className="w-4 h-4 text-yellow-400" />
-            <span className="text-white font-medium text-sm">Get In Touch</span>
+          <div className="inline-flex items-center space-x-2 bg-primary/20 backdrop-blur-lg rounded-full px-6 py-2 border border-base-content/10 mb-6">
+            <MessageCircle className="w-4 h-4 text-warning" />
+            <span className="text-base-content font-medium text-sm">Get In Touch</span>
           </div>
           
           <h1 className="text-5xl lg:text-7xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 bg-clip-text text-transparent">
+            <span className="text-primary">
               Contact Us
             </span>
           </h1>
           
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-base-content/70 max-w-3xl mx-auto leading-relaxed">
             Have questions, suggestions, or need support? We'd love to hear from you! Our team is here to help and ensure you have the best shopping experience possible.
           </p>
         </div>
@@ -164,7 +164,7 @@ export default function ContactPage() {
             <a
               key={index}
               href={info.action}
-              className={`block bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/10 hover:bg-white/10 transition-all duration-300 hover:scale-105 ${
+              className={`block bg-base-content/5 backdrop-blur-lg rounded-2xl p-6 border border-base-content/10 hover:bg-base-content/10 transition-all duration-300 hover:scale-105 ${
                 isVisible ? 'animate-fade-in-up' : 'opacity-0'
               }`}
               style={{ animationDelay: `${index * 200}ms` }}
@@ -172,9 +172,9 @@ export default function ContactPage() {
               <div className={`w-12 h-12 bg-gradient-to-r ${info.gradient} rounded-2xl flex items-center justify-center mb-4`}>
                 <info.icon className="w-6 h-6 text-white" />
               </div>
-              <h3 className="text-lg font-bold text-white mb-2">{info.title}</h3>
-              <p className="text-white font-medium mb-1">{info.info}</p>
-              <p className="text-gray-400 text-sm">{info.subInfo}</p>
+              <h3 className="text-lg font-bold text-base-content mb-2">{info.title}</h3>
+              <p className="text-base-content font-medium mb-1">{info.info}</p>
+              <p className="text-base-content/50 text-sm">{info.subInfo}</p>
             </a>
           ))}
         </div>
@@ -183,27 +183,27 @@ export default function ContactPage() {
           
           {/* Contact Form */}
           <div className={`transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`}>
-            <div className="bg-white/5 backdrop-blur-lg rounded-3xl p-8 border border-white/10">
+            <div className="bg-base-content/5 backdrop-blur-lg rounded-3xl p-8 border border-base-content/10">
               <div className="flex items-center mb-6">
-                <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mr-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-primary to-secondary rounded-2xl flex items-center justify-center mr-4">
                   <Send className="w-6 h-6 text-white" />
                 </div>
-                <h2 className="text-3xl font-bold text-white">Send us a Message</h2>
+                <h2 className="text-3xl font-bold text-base-content">Send us a Message</h2>
               </div>
 
               {isSubmitted && (
-                <div className="mb-6 p-4 bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/20 rounded-2xl flex items-center space-x-3">
-                  <CheckCircle className="w-5 h-5 text-green-400" />
-                  <span className="text-green-400 font-medium">Message sent successfully! We'll get back to you soon.</span>
+                <div className="mb-6 p-4 bg-success/20 border border-success/20 rounded-2xl flex items-center space-x-3">
+                  <CheckCircle className="w-5 h-5 text-success" />
+                  <span className="text-success font-medium">Message sent successfully! We'll get back to you soon.</span>
                 </div>
               )}
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="name" className="block text-white font-medium mb-2">Full Name</label>
+                    <label htmlFor="name" className="block text-base-content font-medium mb-2">Full Name</label>
                     <div className="relative">
-                      <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/50" />
                       <input
                         type="text"
                         id="name"
@@ -211,16 +211,16 @@ export default function ContactPage() {
                         value={formData.name}
                         onChange={handleInputChange}
                         required
-                        className="w-full bg-white/10 border border-white/20 rounded-xl pl-12 pr-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:bg-white/20 transition-all duration-300"
+                        className="w-full bg-base-content/10 border border-base-content/20 rounded-xl pl-12 pr-4 py-3 text-base-content placeholder-base-content/50 focus:outline-none focus:border-primary focus:bg-base-content/20 transition-all duration-300"
                         placeholder="Your name"
                       />
                     </div>
                   </div>
                   
                   <div>
-                    <label htmlFor="email" className="block text-white font-medium mb-2">Email Address</label>
+                    <label htmlFor="email" className="block text-base-content font-medium mb-2">Email Address</label>
                     <div className="relative">
-                      <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/50" />
                       <input
                         type="email"
                         id="email"
@@ -228,7 +228,7 @@ export default function ContactPage() {
                         value={formData.email}
                         onChange={handleInputChange}
                         required
-                        className="w-full bg-white/10 border border-white/20 rounded-xl pl-12 pr-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:bg-white/20 transition-all duration-300"
+                        className="w-full bg-base-content/10 border border-base-content/20 rounded-xl pl-12 pr-4 py-3 text-base-content placeholder-base-content/50 focus:outline-none focus:border-primary focus:bg-base-content/20 transition-all duration-300"
                         placeholder="your@email.com"
                       />
                     </div>
@@ -236,7 +236,7 @@ export default function ContactPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="subject" className="block text-white font-medium mb-2">Subject</label>
+                  <label htmlFor="subject" className="block text-base-content font-medium mb-2">Subject</label>
                   <input
                     type="text"
                     id="subject"
@@ -244,13 +244,13 @@ export default function ContactPage() {
                     value={formData.subject}
                     onChange={handleInputChange}
                     required
-                    className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:bg-white/20 transition-all duration-300"
+                    className="w-full bg-base-content/10 border border-base-content/20 rounded-xl px-4 py-3 text-base-content placeholder-base-content/50 focus:outline-none focus:border-primary focus:bg-base-content/20 transition-all duration-300"
                     placeholder="What's this about?"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-white font-medium mb-2">Message</label>
+                  <label htmlFor="message" className="block text-base-content font-medium mb-2">Message</label>
                   <textarea
                     id="message"
                     name="message"
@@ -258,7 +258,7 @@ export default function ContactPage() {
                     onChange={handleInputChange}
                     required
                     rows={6}
-                    className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:bg-white/20 transition-all duration-300 resize-none"
+                    className="w-full bg-base-content/10 border border-base-content/20 rounded-xl px-4 py-3 text-base-content placeholder-base-content/50 focus:outline-none focus:border-primary focus:bg-base-content/20 transition-all duration-300 resize-none"
                     placeholder="Tell us how we can help you..."
                   />
                 </div>
@@ -266,7 +266,7 @@ export default function ContactPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 disabled:from-purple-500/50 disabled:to-pink-500/50 text-white font-bold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-2xl flex items-center justify-center space-x-2 disabled:cursor-not-allowed disabled:transform-none"
+                  className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/80 hover:to-secondary/80 disabled:from-primary/50 disabled:to-secondary/50 text-white font-bold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-2xl flex items-center justify-center space-x-2 disabled:cursor-not-allowed disabled:transform-none"
                 >
                   {isSubmitting ? (
                     <>
@@ -288,34 +288,34 @@ export default function ContactPage() {
           <div className={`space-y-8 transition-all duration-1000 delay-700 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`}>
             
             {/* FAQ Section */}
-            <div className="bg-white/5 backdrop-blur-lg rounded-3xl p-8 border border-white/10">
+            <div className="bg-base-content/5 backdrop-blur-lg rounded-3xl p-8 border border-base-content/10">
               <div className="flex items-center mb-6">
-                <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center mr-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-success to-success rounded-2xl flex items-center justify-center mr-4">
                   <Sparkles className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-white">Quick Answers</h3>
+                <h3 className="text-2xl font-bold text-base-content">Quick Answers</h3>
               </div>
               
               <div className="space-y-4">
                 {faqs.map((faq, index) => (
-                  <div key={index} className="border-b border-white/10 pb-4 last:border-b-0">
-                    <h4 className="text-white font-semibold mb-2">{faq.question}</h4>
-                    <p className="text-gray-300 text-sm">{faq.answer}</p>
+                  <div key={index} className="border-b border-base-content/10 pb-4 last:border-b-0">
+                    <h4 className="text-base-content font-semibold mb-2">{faq.question}</h4>
+                    <p className="text-base-content/70 text-sm">{faq.answer}</p>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Social Links */}
-            <div className="bg-white/5 backdrop-blur-lg rounded-3xl p-8 border border-white/10">
+            <div className="bg-base-content/5 backdrop-blur-lg rounded-3xl p-8 border border-base-content/10">
               <div className="flex items-center mb-6">
-                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center mr-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-info to-info rounded-2xl flex items-center justify-center mr-4">
                   <Globe className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-white">Follow Us</h3>
+                <h3 className="text-2xl font-bold text-base-content">Follow Us</h3>
               </div>
               
-              <p className="text-gray-300 mb-6">Stay connected and get the latest updates on our social media channels.</p>
+              <p className="text-base-content/70 mb-6">Stay connected and get the latest updates on our social media channels.</p>
               
               <div className="grid grid-cols-2 gap-4">
                 {socialLinks.map((social, index) => (
@@ -332,15 +332,15 @@ export default function ContactPage() {
             </div>
 
             {/* Emergency Contact */}
-            <div className="bg-gradient-to-r from-orange-500/20 to-red-500/20 backdrop-blur-lg rounded-3xl p-8 border border-orange-500/20">
+            <div className="bg-warning/20 backdrop-blur-lg rounded-3xl p-8 border border-warning/20">
               <div className="flex items-center mb-4">
-                <Zap className="w-8 h-8 text-orange-400 mr-3" />
-                <h3 className="text-xl font-bold text-white">Need Immediate Help?</h3>
+                <Zap className="w-8 h-8 text-warning mr-3" />
+                <h3 className="text-xl font-bold text-base-content">Need Immediate Help?</h3>
               </div>
-              <p className="text-gray-300 mb-4">For urgent matters or order issues, call our 24/7 support line:</p>
+              <p className="text-base-content/70 mb-4">For urgent matters or order issues, call our 24/7 support line:</p>
               <a 
                 href="tel:+15551234567" 
-                className="inline-flex items-center space-x-2 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-3 px-6 rounded-xl hover:from-orange-600 hover:to-red-600 transition-all duration-300"
+                className="inline-flex items-center space-x-2 bg-gradient-to-r from-warning to-error text-white font-bold py-3 px-6 rounded-xl hover:from-warning/80 hover:to-error/80 transition-all duration-300"
               >
                 <Phone className="w-5 h-5" />
                 <span>+1 (555) 123-4567</span>
@@ -350,13 +350,13 @@ export default function ContactPage() {
         </div>
 
         {/* Map Section */}
-        <div className="bg-white/5 backdrop-blur-lg rounded-3xl p-8 border border-white/10">
-          <h3 className="text-2xl font-bold text-white mb-6 text-center">Find Us Here</h3>
-          <div className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-2xl p-8 text-center">
-            <MapPin className="w-16 h-16 text-white mx-auto mb-4" />
-            <h4 className="text-xl font-bold text-white mb-2">NextShop Headquarters</h4>
-            <p className="text-gray-300 mb-4">123 Commerce Street, New York, NY 10001</p>
-            <p className="text-gray-400 text-sm">Interactive map coming soon!</p>
+        <div className="bg-base-content/5 backdrop-blur-lg rounded-3xl p-8 border border-base-content/10">
+          <h3 className="text-2xl font-bold text-base-content mb-6 text-center">Find Us Here</h3>
+          <div className="bg-primary/20 rounded-2xl p-8 text-center">
+            <MapPin className="w-16 h-16 text-base-content mx-auto mb-4" />
+            <h4 className="text-xl font-bold text-base-content mb-2">NextShop Headquarters</h4>
+            <p className="text-base-content/70 mb-4">123 Commerce Street, New York, NY 10001</p>
+            <p className="text-base-content/50 text-sm">Interactive map coming soon!</p>
           </div>
         </div>
       </div>

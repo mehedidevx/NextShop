@@ -110,21 +110,21 @@ export default function FooterSection() {
   ]
 
   const trustBadges = [
-    { icon: Shield, text: "Secure Payment", color: "text-green-400" },
-    { icon: Truck, text: "Free Shipping", color: "text-blue-400" },
-    { icon: RotateCcw, text: "Easy Returns", color: "text-purple-400" },
-    { icon: Star, text: "Quality Guarantee", color: "text-yellow-400" }
+    { icon: Shield, text: "Secure Payment", color: "text-success" },
+    { icon: Truck, text: "Free Shipping", color: "text-info" },
+    { icon: RotateCcw, text: "Easy Returns", color: "text-secondary" },
+    { icon: Star, text: "Quality Guarantee", color: "text-warning" }
   ]
 
   const paymentMethods = ["💳", "🏦", "📱", "💰", "🔒", "✨"]
 
   return (
-    <footer className="relative bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900 text-white overflow-hidden">
+    <footer className="relative bg-gradient-to-br from-base-300 via-base-200 to-base-100 text-base-content overflow-hidden">
 
       {/* Background decorative elements */}
       <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-pulse"></div>
-        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-pulse animation-delay-2000"></div>
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-pulse"></div>
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-secondary rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-pulse animation-delay-2000"></div>
       </div>
 
       {/* Floating geometric shapes */}
@@ -132,7 +132,7 @@ export default function FooterSection() {
         {stars.map((star, i) => (
           <div
             key={i}
-            className="absolute w-2 h-2 bg-white rounded-full animate-twinkle opacity-30"
+            className="absolute w-2 h-2 bg-accent rounded-full animate-twinkle opacity-30"
             style={{
               left: star.left,
               top: star.top,
@@ -146,33 +146,33 @@ export default function FooterSection() {
       <div className="relative z-10">
 
         {/* Newsletter Section */}
-        <div className="border-b border-white/10">
+        <div className="border-b border-base-content/10">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div className="grid lg:grid-cols-2 gap-8 items-center">
 
               <div className="text-center lg:text-left">
                 <h3 className="text-3xl lg:text-4xl font-bold mb-4">
-                  Stay in the <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Loop</span>
+                  Stay in the <span className="text-primary">Loop</span>
                 </h3>
-                <p className="text-gray-300 text-lg mb-6 lg:mb-0">
+                <p className="text-base-content/70 text-lg mb-6 lg:mb-0">
                   Subscribe to get special offers, free giveaways, and exclusive deals delivered to your inbox
                 </p>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <div className="flex-1 relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/50" />
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email address"
-                    className="w-full pl-12 pr-4 py-4 bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-300"
+                    className="w-full pl-12 pr-4 py-4 bg-base-content/10 backdrop-blur-lg border border-base-content/20 rounded-2xl text-base-content placeholder-base-content/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
                   />
                 </div>
                 <button
                   onClick={handleNewsletterSubmit}
-                  className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2 hover:shadow-lg"
+                  className="bg-gradient-to-r from-primary to-secondary hover:from-primary/80 hover:to-secondary/80 text-white font-semibold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2 hover:shadow-lg"
                 >
                   <Send className="w-5 h-5" />
                   <span>Subscribe</span>
@@ -188,27 +188,27 @@ export default function FooterSection() {
 
             <div className="lg:col-span-2 space-y-6">
               <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center">
+                <div className="w-12 h-12 bg-gradient-to-r from-primary to-secondary rounded-2xl flex items-center justify-center">
                   <ShoppingBag className="w-7 h-7 text-white" />
                 </div>
                 <span className="text-3xl font-bold">NextShop</span>
               </div>
 
-              <p className="text-gray-300 leading-relaxed max-w-md">
+              <p className="text-base-content/70 leading-relaxed max-w-md">
                 Your premier destination for quality products at amazing prices. We're committed to delivering exceptional shopping experiences with style and convenience.
               </p>
 
               <div className="space-y-3">
-                <div className="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors">
-                  <Phone className="w-5 h-5 text-purple-400" />
+                <div className="flex items-center space-x-3 text-base-content/70 hover:text-base-content transition-colors">
+                  <Phone className="w-5 h-5 text-primary" />
                   <span>+1 (555) 123-4567</span>
                 </div>
-                <div className="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors">
-                  <Mail className="w-5 h-5 text-purple-400" />
+                <div className="flex items-center space-x-3 text-base-content/70 hover:text-base-content transition-colors">
+                  <Mail className="w-5 h-5 text-primary" />
                   <span>hello@nextshop.com</span>
                 </div>
-                <div className="flex items-start space-x-3 text-gray-300 hover:text-white transition-colors">
-                  <MapPin className="w-5 h-5 text-purple-400 mt-1" />
+                <div className="flex items-start space-x-3 text-base-content/70 hover:text-base-content transition-colors">
+                  <MapPin className="w-5 h-5 text-primary mt-1" />
                   <span>123 Shopping Street<br />New York, NY 10001</span>
                 </div>
               </div>
@@ -219,7 +219,7 @@ export default function FooterSection() {
                     key={index}
                     href={social.href}
                     aria-label={social.name}
-                    className={`w-12 h-12 bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 flex items-center justify-center text-gray-300 ${social.color} transition-all duration-300 transform hover:scale-110 hover:bg-white/20`}
+                    className={`w-12 h-12 bg-base-content/10 backdrop-blur-lg rounded-2xl border border-base-content/20 flex items-center justify-center text-base-content/70 ${social.color} transition-all duration-300 transform hover:scale-110 hover:bg-base-content/20`}
                   >
                     <social.icon className="w-5 h-5" />
                   </a>
@@ -233,11 +233,11 @@ export default function FooterSection() {
                   onClick={() => toggleSection(section.title)}
                   className="lg:hidden w-full flex items-center justify-between text-left"
                 >
-                  <h4 className="text-xl font-semibold text-white">{section.title}</h4>
+                  <h4 className="text-xl font-semibold text-base-content">{section.title}</h4>
                   {expandedSections[section.title] ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
                 </button>
 
-                <h4 className="hidden lg:block text-xl font-semibold text-white mb-6">
+                <h4 className="hidden lg:block text-xl font-semibold text-base-content mb-6">
                   {section.title}
                 </h4>
 
@@ -246,7 +246,7 @@ export default function FooterSection() {
                     <a
                       key={linkIndex}
                       href={link.href}
-                      className="block text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-200"
+                      className="block text-base-content/70 hover:text-base-content hover:translate-x-1 transition-all duration-200"
                     >
                       {link.name}
                     </a>
@@ -256,38 +256,38 @@ export default function FooterSection() {
             ))}
           </div>
 
-          <div className="mt-16 pt-8 border-t border-white/10">
+          <div className="mt-16 pt-8 border-t border-base-content/10">
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {trustBadges.map((badge, index) => (
                 <div
                   key={index}
-                  className="flex items-center space-x-3 p-4 bg-white/5 backdrop-blur-lg rounded-2xl border border-white/10 hover:bg-white/10 transition-all duration-300"
+                  className="flex items-center space-x-3 p-4 bg-base-content/5 backdrop-blur-lg rounded-2xl border border-base-content/10 hover:bg-base-content/10 transition-all duration-300"
                 >
                   <badge.icon className={`w-6 h-6 ${badge.color}`} />
-                  <span className="text-gray-300 font-medium">{badge.text}</span>
+                  <span className="text-base-content/70 font-medium">{badge.text}</span>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        <div className="border-t border-white/10">
+        <div className="border-t border-base-content/10">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div className="flex flex-col lg:flex-row items-center justify-between space-y-4 lg:space-y-0">
-              <div className="flex items-center space-x-2 text-gray-300">
+              <div className="flex items-center space-x-2 text-base-content/70">
                 <span>&copy; 2024 NextShop. All rights reserved.</span>
                 <span>Made with</span>
-                <Heart className="w-4 h-4 text-red-400 fill-current animate-pulse" />
+                <Heart className="w-4 h-4 text-error fill-current animate-pulse" />
                 <span>in Bangladesh</span>
               </div>
 
               <div className="flex items-center space-x-4">
-                <span className="text-gray-400 text-sm hidden sm:block">We Accept:</span>
+                <span className="text-base-content/50 text-sm hidden sm:block">We Accept:</span>
                 <div className="flex items-center space-x-2">
                   {paymentMethods.map((method, index) => (
                     <div
                       key={index}
-                      className="w-10 h-10 bg-white/10 backdrop-blur-lg rounded-lg border border-white/20 flex items-center justify-center text-xl hover:bg-white/20 transition-all duration-300"
+                      className="w-10 h-10 bg-base-content/10 backdrop-blur-lg rounded-lg border border-base-content/20 flex items-center justify-center text-xl hover:bg-base-content/20 transition-all duration-300"
                     >
                       {method}
                     </div>
@@ -301,11 +301,22 @@ export default function FooterSection() {
 
       <button
         onClick={scrollToTop}
-        className="fixed bottom-8 right-8 w-14 h-14 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110 flex items-center justify-center z-50"
+        className="fixed bottom-8 right-8 w-14 h-14 bg-gradient-to-r from-primary to-secondary hover:from-primary/80 hover:to-secondary/80 text-white rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110 flex items-center justify-center z-50"
         aria-label="Scroll to top"
       >
         <ArrowUp className="w-6 h-6" />
       </button>
+
+      <style jsx>{`
+        @keyframes twinkle {
+          0%, 100% { opacity: 0.3; transform: scale(1); }
+          50% { opacity: 0.8; transform: scale(1.1); }
+        }
+        .animate-twinkle {
+          animation: twinkle 2s ease-in-out infinite;
+        }
+        .animation-delay-2000 { animation-delay: 2s; }
+      `}</style>
     </footer>
   )
 }

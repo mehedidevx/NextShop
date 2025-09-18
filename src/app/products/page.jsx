@@ -22,101 +22,114 @@ export default function Products() {
   const [filterCategory, setFilterCategory] = useState('all');
   const [favorites, setFavorites] = useState(new Set());
 
-  // mock API call
+  // // mock API call
+  // const getProducts = async () => {
+  //   await new Promise(resolve => setTimeout(resolve, 1000));
+  //   return [
+  //     {
+  //       id: 1,
+  //       name: "Premium Wireless Headphones",
+  //       price: 299.99,
+  //       originalPrice: 399.99,
+  //       image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop",
+  //       rating: 4.8,
+  //       reviews: 124,
+  //       category: "Electronics",
+  //       brand: "TechPro",
+  //       isNew: true,
+  //       isFeatured: true,
+  //       discount: 25,
+  //       description: "High-quality wireless headphones with noise cancellation"
+  //     },
+  //     {
+  //       id: 2,
+  //       name: "Smart Fitness Watch",
+  //       price: 199.99,
+  //       originalPrice: 249.99,
+  //       image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=300&fit=crop",
+  //       rating: 4.6,
+  //       reviews: 89,
+  //       category: "Wearables",
+  //       brand: "FitTech",
+  //       isNew: false,
+  //       isFeatured: true,
+  //       discount: 20,
+  //       description: "Advanced fitness tracking with heart rate monitoring"
+  //     },
+  //     {
+  //       id: 3,
+  //       name: "Organic Coffee Beans",
+  //       price: 24.99,
+  //       originalPrice: 29.99,
+  //       image: "https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=300&h=300&fit=crop",
+  //       rating: 4.9,
+  //       reviews: 203,
+  //       category: "Food & Beverage",
+  //       brand: "BrewMaster",
+  //       isNew: false,
+  //       isFeatured: false,
+  //       discount: 17,
+  //       description: "Premium organic coffee beans, ethically sourced"
+  //     },
+  //     {
+  //       id: 4,
+  //       name: "Leather Messenger Bag",
+  //       price: 89.99,
+  //       originalPrice: 119.99,
+  //       image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=300&h=300&fit=crop",
+  //       rating: 4.7,
+  //       reviews: 156,
+  //       category: "Fashion",
+  //       brand: "StyleCraft",
+  //       isNew: true,
+  //       isFeatured: false,
+  //       discount: 25,
+  //       description: "Handcrafted genuine leather messenger bag"
+  //     },
+  //     {
+  //       id: 5,
+  //       name: "Wireless Charging Pad",
+  //       price: 39.99,
+  //       originalPrice: 49.99,
+  //       image: "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=300&h=300&fit=crop",
+  //       rating: 4.4,
+  //       reviews: 67,
+  //       category: "Electronics",
+  //       brand: "ChargePlus",
+  //       isNew: false,
+  //       isFeatured: true,
+  //       discount: 20,
+  //       description: "Fast wireless charging for all compatible devices"
+  //     },
+  //     {
+  //       id: 6,
+  //       name: "Yoga Mat Premium",
+  //       price: 49.99,
+  //       originalPrice: 69.99,
+  //       image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=300&h=300&fit=crop",
+  //       rating: 4.8,
+  //       reviews: 92,
+  //       category: "Sports & Fitness",
+  //       brand: "ZenFit",
+  //       isNew: false,
+  //       isFeatured: false,
+  //       discount: 29,
+  //       description: "Non-slip premium yoga mat with carrying strap"
+  //     }
+  //   ];
+  // };
+
+    // ✅ Real API call
   const getProducts = async () => {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    return [
-      {
-        id: 1,
-        name: "Premium Wireless Headphones",
-        price: 299.99,
-        originalPrice: 399.99,
-        image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop",
-        rating: 4.8,
-        reviews: 124,
-        category: "Electronics",
-        brand: "TechPro",
-        isNew: true,
-        isFeatured: true,
-        discount: 25,
-        description: "High-quality wireless headphones with noise cancellation"
-      },
-      {
-        id: 2,
-        name: "Smart Fitness Watch",
-        price: 199.99,
-        originalPrice: 249.99,
-        image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=300&fit=crop",
-        rating: 4.6,
-        reviews: 89,
-        category: "Wearables",
-        brand: "FitTech",
-        isNew: false,
-        isFeatured: true,
-        discount: 20,
-        description: "Advanced fitness tracking with heart rate monitoring"
-      },
-      {
-        id: 3,
-        name: "Organic Coffee Beans",
-        price: 24.99,
-        originalPrice: 29.99,
-        image: "https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=300&h=300&fit=crop",
-        rating: 4.9,
-        reviews: 203,
-        category: "Food & Beverage",
-        brand: "BrewMaster",
-        isNew: false,
-        isFeatured: false,
-        discount: 17,
-        description: "Premium organic coffee beans, ethically sourced"
-      },
-      {
-        id: 4,
-        name: "Leather Messenger Bag",
-        price: 89.99,
-        originalPrice: 119.99,
-        image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=300&h=300&fit=crop",
-        rating: 4.7,
-        reviews: 156,
-        category: "Fashion",
-        brand: "StyleCraft",
-        isNew: true,
-        isFeatured: false,
-        discount: 25,
-        description: "Handcrafted genuine leather messenger bag"
-      },
-      {
-        id: 5,
-        name: "Wireless Charging Pad",
-        price: 39.99,
-        originalPrice: 49.99,
-        image: "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=300&h=300&fit=crop",
-        rating: 4.4,
-        reviews: 67,
-        category: "Electronics",
-        brand: "ChargePlus",
-        isNew: false,
-        isFeatured: true,
-        discount: 20,
-        description: "Fast wireless charging for all compatible devices"
-      },
-      {
-        id: 6,
-        name: "Yoga Mat Premium",
-        price: 49.99,
-        originalPrice: 69.99,
-        image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=300&h=300&fit=crop",
-        rating: 4.8,
-        reviews: 92,
-        category: "Sports & Fitness",
-        brand: "ZenFit",
-        isNew: false,
-        isFeatured: false,
-        discount: 29,
-        description: "Non-slip premium yoga mat with carrying strap"
-      }
-    ];
+    try {
+      const res = await fetch("/api/products"); // server route
+      const data = await res.json();
+      console.log(data)
+      return data;
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      return [];
+    }
   };
 
   // load products

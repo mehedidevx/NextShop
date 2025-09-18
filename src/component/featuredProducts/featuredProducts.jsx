@@ -16,6 +16,8 @@ export default function FeaturedProducts() {
   const [currentProductSlide, setCurrentProductSlide] = useState(0);
   const [likedProducts, setLikedProducts] = useState(new Set());
   const [isVisible, setIsVisible] = useState(false);
+  const [product, setProducts] = useState()
+  console.log(product)
   // fetch products on mount
   useEffect(() => {
     const fetchData = async () => {
@@ -40,8 +42,8 @@ export default function FeaturedProducts() {
       reviews: 234,
       image: "🎧",
       badge: "Best Seller",
-      badgeColor: "bg-red-500",
-      gradient: "from-purple-500 to-pink-500",
+      badgeColor: "badge-error",
+      gradient: "from-secondary to-accent",
     },
     {
       id: 2,
@@ -52,8 +54,8 @@ export default function FeaturedProducts() {
       reviews: 189,
       image: "⌚",
       badge: "New Arrival",
-      badgeColor: "bg-green-500",
-      gradient: "from-blue-500 to-cyan-500",
+      badgeColor: "badge-success",
+      gradient: "from-info to-primary",
     },
     {
       id: 3,
@@ -64,8 +66,8 @@ export default function FeaturedProducts() {
       reviews: 156,
       image: "📷",
       badge: "Limited",
-      badgeColor: "bg-orange-500",
-      gradient: "from-emerald-500 to-teal-500",
+      badgeColor: "badge-warning",
+      gradient: "from-success to-info",
     },
     {
       id: 4,
@@ -76,8 +78,8 @@ export default function FeaturedProducts() {
       reviews: 312,
       image: "💻",
       badge: "Hot Deal",
-      badgeColor: "bg-yellow-500",
-      gradient: "from-indigo-500 to-purple-500",
+      badgeColor: "badge-warning",
+      gradient: "from-primary to-secondary",
     },
     {
       id: 5,
@@ -88,8 +90,8 @@ export default function FeaturedProducts() {
       reviews: 267,
       image: "🔊",
       badge: "Popular",
-      badgeColor: "bg-pink-500",
-      gradient: "from-rose-500 to-pink-500",
+      badgeColor: "badge-secondary",
+      gradient: "from-accent to-secondary",
     },
     {
       id: 6,
@@ -100,8 +102,8 @@ export default function FeaturedProducts() {
       reviews: 445,
       image: "📱",
       badge: "Trending",
-      badgeColor: "bg-blue-500",
-      gradient: "from-violet-500 to-purple-500",
+      badgeColor: "badge-info",
+      gradient: "from-primary to-accent",
     },
   ];
 
@@ -156,11 +158,11 @@ export default function FeaturedProducts() {
   };
 
   return (
-    <section className="relative py-20 bg-gradient-to-br from-gray-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900 dark:to-pink-900 overflow-hidden">
+    <section className="relative py-20 bg-base-200 overflow-hidden">
       {/* Background Decorations */}
       <div className="absolute inset-0">
-        <div className="absolute top-20 left-10 w-64 h-64 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-80 h-80 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-2000"></div>
+        <div className="absolute top-20 left-10 w-64 h-64 bg-primary/20 rounded-full filter blur-xl opacity-60 animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-80 h-80 bg-secondary/20 rounded-full filter blur-xl opacity-60 animate-pulse animation-delay-2000"></div>
       </div>
 
       <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
@@ -170,19 +172,19 @@ export default function FeaturedProducts() {
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
           }`}
         >
-          <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-lg rounded-full px-6 py-2 border border-purple-200 dark:border-purple-700 mb-6">
-            <TrendingUp className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-            <span className="text-purple-600 dark:text-purple-400 font-medium text-sm">
+          <div className="badge badge-lg bg-primary/20 border-primary/30 backdrop-blur-lg mb-6">
+            <TrendingUp className="w-4 h-4 text-primary mr-2" />
+            <span className="text-base-content font-medium">
               Trending Products
             </span>
           </div>
 
           <h2 className="text-4xl lg:text-5xl font-bold mb-4">
-            <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               Featured Products
             </span>
           </h2>
-          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          <p className="text-xl text-base-content/70 max-w-2xl mx-auto">
             Discover our handpicked selection of premium products at unbeatable
             prices
           </p>
@@ -193,16 +195,16 @@ export default function FeaturedProducts() {
           {/* Navigation Buttons */}
           <button
             onClick={prevSlide}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white dark:bg-gray-800 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center hover:scale-110 group"
+            className="btn btn-circle btn-ghost bg-base-100 hover:bg-base-200 shadow-lg hover:shadow-xl absolute left-0 top-1/2 -translate-y-1/2 z-20 hover:scale-110 transition-all duration-300 group"
           >
-            <ChevronLeft className="w-6 h-6 text-gray-600 dark:text-gray-300 group-hover:text-purple-600" />
+            <ChevronLeft className="w-6 h-6 text-base-content group-hover:text-primary" />
           </button>
 
           <button
             onClick={nextSlide}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white dark:bg-gray-800 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center hover:scale-110 group"
+            className="btn btn-circle btn-ghost bg-base-100 hover:bg-base-200 shadow-lg hover:shadow-xl absolute right-0 top-1/2 -translate-y-1/2 z-20 hover:scale-110 transition-all duration-300 group"
           >
-            <ChevronRight className="w-6 h-6 text-gray-600 dark:text-gray-300 group-hover:text-purple-600" />
+            <ChevronRight className="w-6 h-6 text-base-content group-hover:text-primary" />
           </button>
 
           {/* Products Grid */}
@@ -223,19 +225,17 @@ export default function FeaturedProducts() {
                         .map((product, index) => (
                           <div
                             key={product.id}
-                            className={`group bg-white dark:bg-gray-800 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-2 overflow-hidden ${
+                            className={`card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-2 group ${
                               isVisible ? "animate-fade-in-up" : "opacity-0"
                             }`}
                             style={{ animationDelay: `${index * 150}ms` }}
                           >
                             {/* Product Image */}
-                            <div
+                            <figure
                               className={`relative h-64 bg-gradient-to-br ${product.gradient} flex items-center justify-center overflow-hidden`}
                             >
                               {/* Badge */}
-                              <div
-                                className={`absolute top-4 left-4 ${product.badgeColor} text-white px-3 py-1 rounded-full text-xs font-semibold`}
-                              >
+                              <div className={`badge ${product.badgeColor} absolute top-4 left-4 font-semibold`}>
                                 {product.badge}
                               </div>
 
@@ -243,11 +243,11 @@ export default function FeaturedProducts() {
                               <div className="absolute top-4 right-4 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
                                 <button
                                   onClick={() => toggleLike(product.id)}
-                                  className={`w-10 h-10 rounded-full backdrop-blur-lg border border-white/20 flex items-center justify-center transition-all duration-300 hover:scale-110 ${
+                                  className={`btn btn-circle btn-sm ${
                                     likedProducts.has(product.id)
-                                      ? "bg-red-500 text-white"
-                                      : "bg-white/10 text-white hover:bg-white/20"
-                                  }`}
+                                      ? "btn-error text-error-content"
+                                      : "btn-ghost bg-base-100/20 hover:bg-base-100/30 text-base-100"
+                                  } hover:scale-110 transition-all duration-300`}
                                 >
                                   <Heart
                                     className={`w-4 h-4 ${
@@ -257,7 +257,7 @@ export default function FeaturedProducts() {
                                     }`}
                                   />
                                 </button>
-                                <button className="w-10 h-10 bg-white/10 backdrop-blur-lg rounded-full border border-white/20 text-white flex items-center justify-center hover:bg-white/20 transition-all duration-300 hover:scale-110">
+                                <button className="btn btn-circle btn-sm btn-ghost bg-base-100/20 hover:bg-base-100/30 text-base-100 hover:scale-110 transition-all duration-300">
                                   <Eye className="w-4 h-4" />
                                 </button>
                               </div>
@@ -268,31 +268,33 @@ export default function FeaturedProducts() {
                               </div>
 
                               {/* Floating Elements */}
-                              <div className="absolute bottom-2 left-2 w-8 h-8 bg-white/20 rounded-full animate-bounce"></div>
-                              <div className="absolute top-1/2 right-2 w-6 h-6 bg-white/20 rounded-full animate-bounce animation-delay-1000"></div>
-                            </div>
+                              <div className="absolute bottom-2 left-2 w-8 h-8 bg-base-100/20 rounded-full animate-bounce"></div>
+                              <div className="absolute top-1/2 right-2 w-6 h-6 bg-base-100/20 rounded-full animate-bounce animation-delay-1000"></div>
+                            </figure>
 
                             {/* Product Info */}
-                            <div className="p-6">
-                              <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-2 group-hover:text-purple-600 transition-colors">
+                            <div className="card-body">
+                              <h2 className="card-title text-base-content group-hover:text-primary transition-colors">
                                 {product.name}
-                              </h3>
+                              </h2>
 
                               {/* Rating */}
                               <div className="flex items-center space-x-2 mb-4">
-                                <div className="flex items-center">
+                                <div className="rating rating-sm">
                                   {[...Array(5)].map((_, i) => (
-                                    <Star
+                                    <input
                                       key={i}
-                                      className={`w-4 h-4 ${
+                                      type="radio"
+                                      className={`mask mask-star-2 ${
                                         i < Math.floor(product.rating)
-                                          ? "text-yellow-400 fill-current"
-                                          : "text-gray-300"
+                                          ? "bg-warning"
+                                          : "bg-base-300"
                                       }`}
+                                      disabled
                                     />
                                   ))}
                                 </div>
-                                <span className="text-sm text-gray-600 dark:text-gray-300">
+                                <span className="text-sm text-base-content/70">
                                   {product.rating} ({product.reviews} reviews)
                                 </span>
                               </div>
@@ -300,23 +302,25 @@ export default function FeaturedProducts() {
                               {/* Price */}
                               <div className="flex items-center justify-between mb-4">
                                 <div className="flex items-center space-x-2">
-                                  <span className="text-2xl font-bold text-purple-600">
+                                  <span className="text-2xl font-bold text-primary">
                                     {product.price}
                                   </span>
-                                  <span className="text-lg text-gray-500 line-through">
+                                  <span className="text-lg text-base-content/50 line-through">
                                     {product.originalPrice}
                                   </span>
                                 </div>
                               </div>
 
                               {/* Add to Cart Button */}
-                              <button
-                                className={`w-full bg-gradient-to-r ${product.gradient} hover:shadow-lg text-white font-semibold py-3 px-6 rounded-2xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2 group`}
-                              >
-                                <ShoppingCart className="w-5 h-5" />
-                                <span>Add to Cart</span>
-                                <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
-                              </button>
+                              <div className="card-actions">
+                                <button
+                                  className={`btn btn-primary w-full bg-gradient-to-r ${product.gradient} border-none hover:shadow-lg transition-all duration-300 transform hover:scale-105 group`}
+                                >
+                                  <ShoppingCart className="w-5 h-5" />
+                                  <span>Add to Cart</span>
+                                  <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
+                                </button>
+                              </div>
                             </div>
                           </div>
                         ))}
@@ -335,10 +339,10 @@ export default function FeaturedProducts() {
                 <button
                   key={index}
                   onClick={() => setCurrentProductSlide(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  className={`btn btn-xs btn-circle transition-all duration-300 ${
                     index === currentProductSlide
-                      ? "bg-purple-600 scale-125"
-                      : "bg-gray-300 hover:bg-purple-400"
+                      ? "btn-primary scale-125"
+                      : "btn-outline btn-primary hover:btn-primary"
                   }`}
                 />
               )

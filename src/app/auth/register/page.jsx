@@ -12,12 +12,13 @@ import {
   UserPlus,
   Check,
 } from "lucide-react";
-import SocialLogin from "../../component/socialLogin/socialLogin";
+import SocialLogin from "../../../component/socialLogin/socialLogin";
 import Link from "next/link";
 
 import { useRouter } from "next/navigation";
 import { registerUser } from "@/app/actions/auth/registerUser";
 import { toast } from "react-toastify";
+import { signIn } from "next-auth/react";
 
 
 
@@ -42,37 +43,35 @@ export default function RegisterPage() {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setIsLoading(true);
 
-   
-        // Simulate API call
-        // await new Promise(resolve => setTimeout(resolve, 1000));
-        const { name, email, password } = formData;
-        const payload = { name, email, password }
-        console.log(name, email, password);
-        const response = await registerUser(payload);
-        console.log(response);
-        setIsLoading(false)
+  const { name, email, password } = formData;
+  const payload = { name, email, password };
+  const response = await registerUser(payload);
 
+  setIsLoading(false);
 
-        if (response.success === true) {
-            toast.success('Registered in successfully')
-            // setFormData({ email: "", password: '' })
-            // setFormErrors({});
-            setShowPassword(false);
-            console.log(response)
-            router.push('/')
-        }
-        else {
-            toast.warn('Authentication failed')
-            setIsLoading(false);
-            return
-        }
+  if (response.success === true) {
+    toast.success("Registered successfully");
 
-    setIsLoading(false);
-  };
+    // ✅ Register এর পর সাথে সাথে SignIn করে session তৈরি করো
+    const result = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+    });
+
+    if (!result.error) {
+      router.push("/"); // logged in user redirect
+    } else {
+      toast.error("Login failed after registration");
+    }
+  } else {
+    toast.warn("Authentication failed");
+  }
+};
 
   const passwordStrength = (password) => {
     let strength = 0;
@@ -139,7 +138,7 @@ export default function RegisterPage() {
           {/* Registration Form */}
           <div className="space-y-4">
             {/* Name Fields */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 gap-3">
               <div className="space-y-1">
                 <label className="text-sm font-medium text-gray-200">
                   Name

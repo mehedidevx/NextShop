@@ -1,9 +1,9 @@
 import Image from "next/image";
-import Navbar from "./component/navbar/Navbar";
-import HeroSection from "./component/heroSection/heroSection";
+import Navbar from "../component/navbar/Navbar";
+import HeroSection from "../component/heroSection/heroSection";
 
-import FeaturedProducts from "./component/featuredProducts/featuredProducts";
-import WhyChooseUs from "./component/whyChooseUs/whyChooseUs";
+import FeaturedProducts from "../component/featuredProducts/featuredProducts";
+import WhyChooseUs from "../component/whyChooseUs/whyChooseUs";
 
 
 export default function Home() {
