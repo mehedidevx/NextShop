@@ -10,102 +10,104 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import { getProducts } from "@/app/actions/products/getProducts";
 
-export default function FeaturedProducts() {
+
+export default function product() {
   const [currentProductSlide, setCurrentProductSlide] = useState(0);
   const [likedProducts, setLikedProducts] = useState(new Set());
   const [isVisible, setIsVisible] = useState(false);
-  const [product, setProducts] = useState()
+  const [product, setProducts] = useState([])
   console.log(product)
-  // fetch products on mount
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await getProducts();
-        setProducts(result); // ✅ data save into state
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
-    fetchData();
-  }, []);
 
-  // Featured Products Data
-  const featuredProducts = [
-    {
-      id: 1,
-      name: "Premium Wireless Headphones",
-      price: "$299",
-      originalPrice: "$399",
-      rating: 4.8,
-      reviews: 234,
-      image: "🎧",
-      badge: "Best Seller",
-      badgeColor: "badge-error",
-      gradient: "from-secondary to-accent",
-    },
-    {
-      id: 2,
-      name: "Smart Fitness Watch",
-      price: "$199",
-      originalPrice: "$279",
-      rating: 4.9,
-      reviews: 189,
-      image: "⌚",
-      badge: "New Arrival",
-      badgeColor: "badge-success",
-      gradient: "from-info to-primary",
-    },
-    {
-      id: 3,
-      name: "Professional Camera",
-      price: "$799",
-      originalPrice: "$999",
-      rating: 4.7,
-      reviews: 156,
-      image: "📷",
-      badge: "Limited",
-      badgeColor: "badge-warning",
-      gradient: "from-success to-info",
-    },
-    {
-      id: 4,
-      name: "Gaming Laptop",
-      price: "$1299",
-      originalPrice: "$1599",
-      rating: 4.9,
-      reviews: 312,
-      image: "💻",
-      badge: "Hot Deal",
-      badgeColor: "badge-warning",
-      gradient: "from-primary to-secondary",
-    },
-    {
-      id: 5,
-      name: "Wireless Speaker",
-      price: "$149",
-      originalPrice: "$199",
-      rating: 4.6,
-      reviews: 267,
-      image: "🔊",
-      badge: "Popular",
-      badgeColor: "badge-secondary",
-      gradient: "from-accent to-secondary",
-    },
-    {
-      id: 6,
-      name: "Smart Phone",
-      price: "$899",
-      originalPrice: "$1099",
-      rating: 4.8,
-      reviews: 445,
-      image: "📱",
-      badge: "Trending",
-      badgeColor: "badge-info",
-      gradient: "from-primary to-accent",
-    },
-  ];
+
+  // // Featured Products Data
+  // const product = [
+  //   {
+  //     id: 1,
+  //     name: "Premium Wireless Headphones",
+  //     price: "$299",
+  //     originalPrice: "$399",
+  //     rating: 4.8,
+  //     reviews: 234,
+  //     image: "🎧",
+  //     badge: "Best Seller",
+  //     badgeColor: "badge-error",
+  //     gradient: "from-secondary to-accent",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Smart Fitness Watch",
+  //     price: "$199",
+  //     originalPrice: "$279",
+  //     rating: 4.9,
+  //     reviews: 189,
+  //     image: "⌚",
+  //     badge: "New Arrival",
+  //     badgeColor: "badge-success",
+  //     gradient: "from-info to-primary",
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Professional Camera",
+  //     price: "$799",
+  //     originalPrice: "$999",
+  //     rating: 4.7,
+  //     reviews: 156,
+  //     image: "📷",
+  //     badge: "Limited",
+  //     badgeColor: "badge-warning",
+  //     gradient: "from-success to-info",
+  //   },
+  //   {
+  //     id: 4,
+  //     name: "Gaming Laptop",
+  //     price: "$1299",
+  //     originalPrice: "$1599",
+  //     rating: 4.9,
+  //     reviews: 312,
+  //     image: "💻",
+  //     badge: "Hot Deal",
+  //     badgeColor: "badge-warning",
+  //     gradient: "from-primary to-secondary",
+  //   },
+  //   {
+  //     id: 5,
+  //     name: "Wireless Speaker",
+  //     price: "$149",
+  //     originalPrice: "$199",
+  //     rating: 4.6,
+  //     reviews: 267,
+  //     image: "🔊",
+  //     badge: "Popular",
+  //     badgeColor: "badge-secondary",
+  //     gradient: "from-accent to-secondary",
+  //   },
+  //   {
+  //     id: 6,
+  //     name: "Smart Phone",
+  //     price: "$899",
+  //     originalPrice: "$1099",
+  //     rating: 4.8,
+  //     reviews: 445,
+  //     image: "📱",
+  //     badge: "Trending",
+  //     badgeColor: "badge-info",
+  //     gradient: "from-primary to-accent",
+  //   },
+  // ];
+const fetchProduct = async () => {
+  try {
+    const res = await fetch("/api/products", { cache: "no-store" });
+    if (!res.ok) throw new Error(`Failed to fetch products: ${res.status}`);
+    const data = await res.json();
+    setProducts(data.data || []); // set state
+  } catch (error) {
+    console.error("Error fetching products:", error);
+  }
+};
+useEffect(() => {
+  fetchProduct();
+}, []);
 
   // Scroll detection for animations
   useEffect(() => {
@@ -127,11 +129,11 @@ export default function FeaturedProducts() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentProductSlide(
-        (prev) => (prev + 1) % Math.ceil(featuredProducts.length / 3)
+        (prev) => (prev + 1) % Math.ceil(product.length / 3)
       );
     }, 5000);
     return () => clearInterval(interval);
-  }, [featuredProducts.length]);
+  }, [product.length]);
 
   const toggleLike = (productId) => {
     setLikedProducts((prev) => {
@@ -147,13 +149,13 @@ export default function FeaturedProducts() {
 
   const nextSlide = () => {
     setCurrentProductSlide(
-      (prev) => (prev + 1) % Math.ceil(featuredProducts.length / 3)
+      (prev) => (prev + 1) % Math.ceil(product.length / 3)
     );
   };
 
   const prevSlide = () => {
     setCurrentProductSlide((prev) =>
-      prev === 0 ? Math.ceil(featuredProducts.length / 3) - 1 : prev - 1
+      prev === 0 ? Math.ceil(product.length / 3) - 1 : prev - 1
     );
   };
 
@@ -216,15 +218,15 @@ export default function FeaturedProducts() {
               }}
             >
               {Array.from(
-                { length: Math.ceil(featuredProducts.length / 3) },
+                { length: Math.ceil(product.length / 3) },
                 (_, slideIndex) => (
                   <div key={slideIndex} className="w-full flex-shrink-0">
                     <div className="grid md:grid-cols-3 gap-8">
-                      {featuredProducts
+                      {product
                         .slice(slideIndex * 3, (slideIndex + 1) * 3)
                         .map((product, index) => (
                           <div
-                            key={product.id}
+                            key={product._id}
                             className={`card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-2 group ${
                               isVisible ? "animate-fade-in-up" : "opacity-0"
                             }`}
@@ -263,9 +265,9 @@ export default function FeaturedProducts() {
                               </div>
 
                               {/* Product Emoji */}
-                              <div className="text-8xl group-hover:scale-110 transition-transform duration-500">
-                                {product.image}
-                              </div>
+                              <img src={product.image} className=" w-full group-hover:scale-110 transition-transform duration-500">
+                                
+                              </img>
 
                               {/* Floating Elements */}
                               <div className="absolute bottom-2 left-2 w-8 h-8 bg-base-100/20 rounded-full animate-bounce"></div>
@@ -316,8 +318,8 @@ export default function FeaturedProducts() {
                                 <button
                                   className={`btn btn-primary w-full bg-gradient-to-r ${product.gradient} border-none hover:shadow-lg transition-all duration-300 transform hover:scale-105 group`}
                                 >
-                                  <ShoppingCart className="w-5 h-5" />
-                                  <span>Add to Cart</span>
+                                 
+                                  <span>View Details</span>
                                   <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
                                 </button>
                               </div>
@@ -334,7 +336,7 @@ export default function FeaturedProducts() {
           {/* Slider Indicators */}
           <div className="flex justify-center mt-8 space-x-2">
             {Array.from(
-              { length: Math.ceil(featuredProducts.length / 3) },
+              { length: Math.ceil(product.length / 3) },
               (_, index) => (
                 <button
                   key={index}

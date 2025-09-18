@@ -1,130 +1,41 @@
-"use client"
-import React, { useState, useEffect } from 'react';
-import { 
-  Search, 
-  Grid3X3, 
-  List, 
-  Star, 
-  Heart, 
-  ShoppingCart, 
+"use client";
+import React, { useState, useEffect } from "react";
+import {
+  Search,
+  Grid3X3,
+  List,
+  Star,
+  Heart,
+  ShoppingCart,
   Eye,
   ChevronDown,
   Loader2,
-  Package
-} from 'lucide-react';
+  Package,
+} from "lucide-react";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [viewMode, setViewMode] = useState('grid');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState('featured');
-  const [filterCategory, setFilterCategory] = useState('all');
+  const [viewMode, setViewMode] = useState("grid");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortBy, setSortBy] = useState("featured");
+  const [filterCategory, setFilterCategory] = useState("all");
   const [favorites, setFavorites] = useState(new Set());
 
-  // // mock API call
-  // const getProducts = async () => {
-  //   await new Promise(resolve => setTimeout(resolve, 1000));
-  //   return [
-  //     {
-  //       id: 1,
-  //       name: "Premium Wireless Headphones",
-  //       price: 299.99,
-  //       originalPrice: 399.99,
-  //       image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop",
-  //       rating: 4.8,
-  //       reviews: 124,
-  //       category: "Electronics",
-  //       brand: "TechPro",
-  //       isNew: true,
-  //       isFeatured: true,
-  //       discount: 25,
-  //       description: "High-quality wireless headphones with noise cancellation"
-  //     },
-  //     {
-  //       id: 2,
-  //       name: "Smart Fitness Watch",
-  //       price: 199.99,
-  //       originalPrice: 249.99,
-  //       image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=300&fit=crop",
-  //       rating: 4.6,
-  //       reviews: 89,
-  //       category: "Wearables",
-  //       brand: "FitTech",
-  //       isNew: false,
-  //       isFeatured: true,
-  //       discount: 20,
-  //       description: "Advanced fitness tracking with heart rate monitoring"
-  //     },
-  //     {
-  //       id: 3,
-  //       name: "Organic Coffee Beans",
-  //       price: 24.99,
-  //       originalPrice: 29.99,
-  //       image: "https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=300&h=300&fit=crop",
-  //       rating: 4.9,
-  //       reviews: 203,
-  //       category: "Food & Beverage",
-  //       brand: "BrewMaster",
-  //       isNew: false,
-  //       isFeatured: false,
-  //       discount: 17,
-  //       description: "Premium organic coffee beans, ethically sourced"
-  //     },
-  //     {
-  //       id: 4,
-  //       name: "Leather Messenger Bag",
-  //       price: 89.99,
-  //       originalPrice: 119.99,
-  //       image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=300&h=300&fit=crop",
-  //       rating: 4.7,
-  //       reviews: 156,
-  //       category: "Fashion",
-  //       brand: "StyleCraft",
-  //       isNew: true,
-  //       isFeatured: false,
-  //       discount: 25,
-  //       description: "Handcrafted genuine leather messenger bag"
-  //     },
-  //     {
-  //       id: 5,
-  //       name: "Wireless Charging Pad",
-  //       price: 39.99,
-  //       originalPrice: 49.99,
-  //       image: "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=300&h=300&fit=crop",
-  //       rating: 4.4,
-  //       reviews: 67,
-  //       category: "Electronics",
-  //       brand: "ChargePlus",
-  //       isNew: false,
-  //       isFeatured: true,
-  //       discount: 20,
-  //       description: "Fast wireless charging for all compatible devices"
-  //     },
-  //     {
-  //       id: 6,
-  //       name: "Yoga Mat Premium",
-  //       price: 49.99,
-  //       originalPrice: 69.99,
-  //       image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=300&h=300&fit=crop",
-  //       rating: 4.8,
-  //       reviews: 92,
-  //       category: "Sports & Fitness",
-  //       brand: "ZenFit",
-  //       isNew: false,
-  //       isFeatured: false,
-  //       discount: 29,
-  //       description: "Non-slip premium yoga mat with carrying strap"
-  //     }
-  //   ];
-  // };
 
-    // ✅ Real API call
+
+
+  // ✅ API call function
   const getProducts = async () => {
     try {
-      const res = await fetch("/api/products"); // server route
+      const res = await fetch("/api/products", { cache: "no-store" });
+
+      if (!res.ok) {
+        throw new Error(`Failed to fetch products. Status: ${res.status}`);
+      }
+
       const data = await res.json();
-      console.log(data)
+      console.log("Fetched Products:", data);
       return data;
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -132,43 +43,46 @@ export default function Products() {
     }
   };
 
-  // load products
+
   useEffect(() => {
     const loadProducts = async () => {
-      try {
-        setLoading(true);
-        const data = await getProducts();
-        setProducts(data);
-      } catch (error) {
-        console.error('Error loading products:', error);
-      } finally {
-        setLoading(false);
-      }
+      setLoading(true);
+      const data = await getProducts();
+      setProducts(data.data);
+      setLoading(false);
     };
+
     loadProducts();
   }, []);
-
+ console.log(products)
   // filter + sort
   const filteredProducts = products
-    .filter(product => {
+    .filter((product) => {
       const matchesSearch =
         product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         product.description.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory = filterCategory === 'all' || product.category === filterCategory;
+      const matchesCategory =
+        filterCategory === "all" || product.category === filterCategory;
       return matchesSearch && matchesCategory;
     })
     .sort((a, b) => {
       switch (sortBy) {
-        case 'price-low': return a.price - b.price;
-        case 'price-high': return b.price - a.price;
-        case 'rating': return b.rating - a.rating;
-        case 'newest': return b.isNew === a.isNew ? 0 : b.isNew ? 1 : -1;
-        case 'featured': return b.isFeatured === a.isFeatured ? 0 : b.isFeatured ? 1 : -1;
-        default: return 0;
+        case "price-low":
+          return a.price - b.price;
+        case "price-high":
+          return b.price - a.price;
+        case "rating":
+          return b.rating - a.rating;
+        case "newest":
+          return b.isNew === a.isNew ? 0 : b.isNew ? 1 : -1;
+        case "featured":
+          return b.isFeatured === a.isFeatured ? 0 : b.isFeatured ? 1 : -1;
+        default:
+          return 0;
       }
     });
 
-  const categories = ['all', ...new Set(products.map(p => p.category))];
+  const categories = ["all", ...new Set(products.map((p) => p.category))];
 
   const toggleFavorite = (productId) => {
     const newFavorites = new Set(favorites);
@@ -184,8 +98,8 @@ export default function Products() {
   const ProductCard = ({ product }) => (
     <div className="group bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-gray-200">
       <div className="relative overflow-hidden">
-        <img 
-          src={product.image} 
+        <img
+          src={product.image}
           alt={product.name}
           className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
         />
@@ -212,9 +126,9 @@ export default function Products() {
           <button
             onClick={() => toggleFavorite(product.id)}
             className={`p-2 rounded-full backdrop-blur-sm transition-colors duration-200 ${
-              favorites.has(product.id) 
-                ? 'bg-red-500 text-white' 
-                : 'bg-white/80 text-gray-600 hover:bg-red-500 hover:text-white'
+              favorites.has(product.id)
+                ? "bg-red-500 text-white"
+                : "bg-white/80 text-gray-600 hover:bg-red-500 hover:text-white"
             }`}
           >
             <Heart className="w-4 h-4" />
@@ -238,11 +152,11 @@ export default function Products() {
             {product.brand}
           </span>
         </div>
-        
+
         <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors duration-200">
           {product.name}
         </h3>
-        
+
         <p className="text-sm text-gray-600 mb-3 line-clamp-2">
           {product.description}
         </p>
@@ -253,20 +167,24 @@ export default function Products() {
               <Star
                 key={i}
                 className={`w-4 h-4 ${
-                  i < Math.floor(product.rating) 
-                    ? 'text-yellow-400 fill-current' 
-                    : 'text-gray-300'
+                  i < Math.floor(product.rating)
+                    ? "text-yellow-400 fill-current"
+                    : "text-gray-300"
                 }`}
               />
             ))}
           </div>
-          <span className="text-sm font-medium text-gray-900">{product.rating}</span>
+          <span className="text-sm font-medium text-gray-900">
+            {product.rating}
+          </span>
           <span className="text-xs text-gray-500">({product.reviews})</span>
         </div>
 
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-lg font-bold text-gray-900">${product.price}</span>
+            <span className="text-lg font-bold text-gray-900">
+              ${product.price}
+            </span>
             {product.originalPrice > product.price && (
               <span className="text-sm text-gray-500 line-through">
                 ${product.originalPrice}
@@ -289,21 +207,33 @@ export default function Products() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between mt-20 gap-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">All Products</h1>
-              <p className="text-gray-600">Discover our complete collection of premium products</p>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                All Products
+              </h1>
+              <p className="text-gray-600">
+                Discover our complete collection of premium products
+              </p>
             </div>
             <div className="flex items-center gap-6">
               <div className="text-center">
-                <div className="text-2xl font-bold text-blue-600">{products.length}</div>
-                <div className="text-xs text-gray-500 uppercase tracking-wide">Products</div>
+                <div className="text-2xl font-bold text-blue-600">
+                  {products.length}
+                </div>
+                <div className="text-xs text-gray-500 uppercase tracking-wide">
+                  Products
+                </div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-green-600">4.7</div>
-                <div className="text-xs text-gray-500 uppercase tracking-wide">Avg Rating</div>
+                <div className="text-xs text-gray-500 uppercase tracking-wide">
+                  Avg Rating
+                </div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-purple-600">50+</div>
-                <div className="text-xs text-gray-500 uppercase tracking-wide">Brands</div>
+                <div className="text-xs text-gray-500 uppercase tracking-wide">
+                  Brands
+                </div>
               </div>
             </div>
           </div>
@@ -332,9 +262,9 @@ export default function Products() {
                 onChange={(e) => setFilterCategory(e.target.value)}
                 className="appearance-none bg-white border border-gray-300 rounded-xl px-4 py-3 pr-10 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
               >
-                {categories.map(category => (
+                {categories.map((category) => (
                   <option key={category} value={category}>
-                    {category === 'all' ? 'All Categories' : category}
+                    {category === "all" ? "All Categories" : category}
                   </option>
                 ))}
               </select>
@@ -358,21 +288,21 @@ export default function Products() {
 
             <div className="flex items-center bg-gray-100 rounded-xl p-1">
               <button
-                onClick={() => setViewMode('grid')}
+                onClick={() => setViewMode("grid")}
                 className={`p-2 rounded-lg transition-colors duration-200 ${
-                  viewMode === 'grid' 
-                    ? 'bg-white text-blue-600 shadow-sm' 
-                    : 'text-gray-500 hover:text-gray-700'
+                  viewMode === "grid"
+                    ? "bg-white text-blue-600 shadow-sm"
+                    : "text-gray-500 hover:text-gray-700"
                 }`}
               >
                 <Grid3X3 className="w-5 h-5" />
               </button>
               <button
-                onClick={() => setViewMode('list')}
+                onClick={() => setViewMode("list")}
                 className={`p-2 rounded-lg transition-colors duration-200 ${
-                  viewMode === 'list' 
-                    ? 'bg-white text-blue-600 shadow-sm' 
-                    : 'text-gray-500 hover:text-gray-700'
+                  viewMode === "list"
+                    ? "bg-white text-blue-600 shadow-sm"
+                    : "text-gray-500 hover:text-gray-700"
                 }`}
               >
                 <List className="w-5 h-5" />
@@ -392,12 +322,16 @@ export default function Products() {
         ) : filteredProducts.length === 0 ? (
           <div className="text-center py-20">
             <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No products found</h3>
-            <p className="text-gray-600 mb-6">Try adjusting your search or filter criteria</p>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              No products found
+            </h3>
+            <p className="text-gray-600 mb-6">
+              Try adjusting your search or filter criteria
+            </p>
             <button
               onClick={() => {
-                setSearchTerm('');
-                setFilterCategory('all');
+                setSearchTerm("");
+                setFilterCategory("all");
               }}
               className="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors duration-200"
             >
@@ -405,12 +339,14 @@ export default function Products() {
             </button>
           </div>
         ) : (
-          <div className={
-            viewMode === 'grid' 
-              ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-              : "space-y-4"
-          }>
-            {filteredProducts.map(product => (
+          <div
+            className={
+              viewMode === "grid"
+                ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+                : "space-y-4"
+            }
+          >
+            {filteredProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
