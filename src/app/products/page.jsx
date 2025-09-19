@@ -21,9 +21,8 @@ export default function Products() {
   const [sortBy, setSortBy] = useState("featured");
   const [filterCategory, setFilterCategory] = useState("all");
   const [favorites, setFavorites] = useState(new Set());
-
-
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 8;
 
   // ✅ API call function
   const getProducts = async () => {
@@ -43,7 +42,6 @@ export default function Products() {
     }
   };
 
-
   useEffect(() => {
     const loadProducts = async () => {
       setLoading(true);
@@ -54,7 +52,7 @@ export default function Products() {
 
     loadProducts();
   }, []);
- console.log(products)
+  
   // filter + sort
   const filteredProducts = products
     .filter((product) => {
@@ -82,7 +80,23 @@ export default function Products() {
       }
     });
 
-  const categories = ["all", ...new Set(products.map((p) => p.category))];
+  // ✅ Fixed Pagination calculation
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+  const startIndex = (currentPage - 1) * productsPerPage;
+  const currentProducts = filteredProducts.slice(
+    startIndex,
+    startIndex + productsPerPage
+  );
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, filterCategory, sortBy]);
+
+  const categories = [
+    "all",
+    ...new Set(products.map((p) => p.category)),
+  ];
 
   const toggleFavorite = (productId) => {
     const newFavorites = new Set(favorites);
@@ -94,29 +108,29 @@ export default function Products() {
     setFavorites(newFavorites);
   };
 
-  // product card (inner component)
+  // product card (inner component) - Fixed with DaisyUI and equal heights
   const ProductCard = ({ product }) => (
-    <div className="group bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-gray-200">
-      <div className="relative overflow-hidden">
+    <div className="group  card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300 border border-base-300 hover:border-primary/30 h-full flex flex-col">
+      <div className="relative overflow-hidden rounded-t-2xl">
         <img
           src={product.image}
           alt={product.name}
-          className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+          className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
         />
         <div className="absolute top-3 left-3 flex flex-col gap-2">
           {product.isNew && (
-            <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full font-medium">
+            <span className="bg-success text-success-content text-xs px-2 py-1 rounded-full font-medium">
               NEW
             </span>
           )}
           {product.isFeatured && (
-            <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-medium flex items-center gap-1">
+            <span className="bg-primary text-primary-content text-xs px-2 py-1 rounded-full font-medium flex items-center gap-1">
               <Star className="w-3 h-3" />
               FEATURED
             </span>
           )}
           {product.discount > 0 && (
-            <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-medium">
+            <span className="bg-error text-error-content text-xs px-2 py-1 rounded-full font-medium">
               -{product.discount}%
             </span>
           )}
@@ -124,74 +138,75 @@ export default function Products() {
 
         <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <button
-            onClick={() => toggleFavorite(product.id)}
+            onClick={() => toggleFavorite(product._id)}
             className={`p-2 rounded-full backdrop-blur-sm transition-colors duration-200 ${
-              favorites.has(product.id)
-                ? "bg-red-500 text-white"
-                : "bg-white/80 text-gray-600 hover:bg-red-500 hover:text-white"
+              favorites.has(product._id)
+                ? "bg-error text-error-content"
+                : "bg-base-100/80 text-base-content hover:bg-error hover:text-error-content"
             }`}
           >
             <Heart className="w-4 h-4" />
           </button>
-          <button className="p-2 rounded-full bg-white/80 backdrop-blur-sm text-gray-600 hover:bg-gray-900 hover:text-white transition-colors duration-200">
+          <button className="p-2 rounded-full bg-base-100/80 backdrop-blur-sm text-base-content hover:bg-neutral hover:text-neutral-content transition-colors duration-200">
             <Eye className="w-4 h-4" />
           </button>
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <button className="w-full bg-white text-gray-900 py-2 px-4 rounded-lg font-medium hover:bg-gray-100 transition-colors duration-200 flex items-center justify-center gap-2">
-            <ShoppingCart className="w-4 h-4" />
-            Add to Cart
+          <button className="w-full bg-base-100 text-base-content py-2 px-4 rounded-lg font-medium hover:bg-base-200 transition-colors duration-200 flex items-center justify-center gap-2">
+            View Details
           </button>
         </div>
       </div>
 
-      <div className="p-4">
-        <div className="mb-2">
-          <span className="text-xs text-gray-500 font-medium uppercase tracking-wide">
-            {product.brand}
-          </span>
-        </div>
-
-        <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors duration-200">
-          {product.name}
-        </h3>
-
-        <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-          {product.description}
-        </p>
-
-        <div className="flex items-center gap-2 mb-3">
-          <div className="flex items-center">
-            {[...Array(5)].map((_, i) => (
-              <Star
-                key={i}
-                className={`w-4 h-4 ${
-                  i < Math.floor(product.rating)
-                    ? "text-yellow-400 fill-current"
-                    : "text-gray-300"
-                }`}
-              />
-            ))}
+      <div className="card-body p-4 flex-grow flex flex-col justify-between">
+        <div className="flex-grow">
+          <div className="mb-2">
+            <span className="text-xs text-base-content/60 font-medium uppercase tracking-wide">
+              {product.brand}
+            </span>
           </div>
-          <span className="text-sm font-medium text-gray-900">
-            {product.rating}
-          </span>
-          <span className="text-xs text-gray-500">({product.reviews})</span>
+
+          <h3 className="font-semibold text-base-content mb-2 line-clamp-2 group-hover:text-primary transition-colors duration-200">
+            {product.name}
+          </h3>
+
+          <p className="text-sm text-base-content/70 mb-3 line-clamp-2">
+            {product.description}
+          </p>
+
+          <div className="flex items-center gap-2 mb-3">
+            <div className="flex items-center">
+              {[...Array(5)].map((_, i) => (
+                <Star
+                  key={i}
+                  className={`w-4 h-4 ${
+                    i < Math.floor(product.rating)
+                      ? "text-warning fill-current"
+                      : "text-base-300"
+                  }`}
+                />
+              ))}
+            </div>
+            <span className="text-sm font-medium text-base-content">
+              {product.rating}
+            </span>
+            <span className="text-xs text-base-content/60">({product.reviews})</span>
+          </div>
         </div>
 
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mt-auto">
           <div className="flex items-center gap-2">
-            <span className="text-lg font-bold text-gray-900">
+            <span className="text-lg font-bold text-base-content">
               ${product.price}
             </span>
             {product.originalPrice > product.price && (
-              <span className="text-sm text-gray-500 line-through">
+              <span className="text-sm text-base-content/60 line-through">
                 ${product.originalPrice}
               </span>
             )}
           </div>
-          <span className="text-xs text-green-600 font-medium">
+          <span className="text-xs text-success font-medium bg-success/10 px-2 py-1 rounded">
             Free Shipping
           </span>
         </div>
@@ -201,37 +216,37 @@ export default function Products() {
 
   // main return
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-base-200">
       {/* Header Section */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-base-100 shadow-sm border-b border-base-300">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between mt-20 gap-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              <h1 className="text-3xl font-bold text-base-content mb-2">
                 All Products
               </h1>
-              <p className="text-gray-600">
+              <p className="text-base-content/70">
                 Discover our complete collection of premium products
               </p>
             </div>
             <div className="flex items-center gap-6">
               <div className="text-center">
-                <div className="text-2xl font-bold text-blue-600">
+                <div className="text-2xl font-bold text-primary">
                   {products.length}
                 </div>
-                <div className="text-xs text-gray-500 uppercase tracking-wide">
+                <div className="text-xs text-base-content/60 uppercase tracking-wide">
                   Products
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-green-600">4.7</div>
-                <div className="text-xs text-gray-500 uppercase tracking-wide">
+                <div className="text-2xl font-bold text-success">4.7</div>
+                <div className="text-xs text-base-content/60 uppercase tracking-wide">
                   Avg Rating
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-purple-600">50+</div>
-                <div className="text-xs text-gray-500 uppercase tracking-wide">
+                <div className="text-2xl font-bold text-secondary">50+</div>
+                <div className="text-xs text-base-content/60 uppercase tracking-wide">
                   Brands
                 </div>
               </div>
@@ -243,70 +258,51 @@ export default function Products() {
       {/* Filters + Results */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Search and Filters */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-8">
-          <div className="flex flex-col lg:flex-row gap-4">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search products, brands, categories..."
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
+        <div className="card bg-base-100 shadow-sm border border-base-300 mb-8">
+          <div className="card-body p-6">
+            <div className="flex flex-col lg:flex-row gap-4">
+              <div className="flex-1 relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/60" />
+                <input
+                  type="text"
+                  placeholder="Search products, brands, categories..."
+                  className="w-full pl-10 pr-4 py-3 border border-base-300 bg-base-100 text-base-content rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors duration-200"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
 
-            <div className="relative">
-              <select
-                value={filterCategory}
-                onChange={(e) => setFilterCategory(e.target.value)}
-                className="appearance-none bg-white border border-gray-300 rounded-xl px-4 py-3 pr-10 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
-              >
-                {categories.map((category) => (
-                  <option key={category} value={category}>
-                    {category === "all" ? "All Categories" : category}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
-            </div>
+              <div className="relative">
+                <select
+                  value={filterCategory}
+                  onChange={(e) => setFilterCategory(e.target.value)}
+                  className="appearance-none bg-base-100 border border-base-300 text-base-content rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors duration-200"
+                >
+                  {categories.map((category) => (
+                    <option key={category} value={category}>
+                      {category === "all" ? "All Categories" : category}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/60 pointer-events-none" />
+              </div>
 
-            <div className="relative">
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="appearance-none bg-white border border-gray-300 rounded-xl px-4 py-3 pr-10 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
-              >
-                <option value="featured">Featured</option>
-                <option value="newest">Newest</option>
-                <option value="price-low">Price: Low to High</option>
-                <option value="price-high">Price: High to Low</option>
-                <option value="rating">Highest Rated</option>
-              </select>
-              <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
-            </div>
+              <div className="relative">
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="appearance-none bg-base-100 border border-base-300 text-base-content rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors duration-200"
+                >
+                  <option value="featured">Featured</option>
+                  <option value="newest">Newest</option>
+                  <option value="price-low">Price: Low to High</option>
+                  <option value="price-high">Price: High to Low</option>
+                  <option value="rating">Highest Rated</option>
+                </select>
+                <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/60 pointer-events-none" />
+              </div>
 
-            <div className="flex items-center bg-gray-100 rounded-xl p-1">
-              <button
-                onClick={() => setViewMode("grid")}
-                className={`p-2 rounded-lg transition-colors duration-200 ${
-                  viewMode === "grid"
-                    ? "bg-white text-blue-600 shadow-sm"
-                    : "text-gray-500 hover:text-gray-700"
-                }`}
-              >
-                <Grid3X3 className="w-5 h-5" />
-              </button>
-              <button
-                onClick={() => setViewMode("list")}
-                className={`p-2 rounded-lg transition-colors duration-200 ${
-                  viewMode === "list"
-                    ? "bg-white text-blue-600 shadow-sm"
-                    : "text-gray-500 hover:text-gray-700"
-                }`}
-              >
-                <List className="w-5 h-5" />
-              </button>
+             
             </div>
           </div>
         </div>
@@ -315,17 +311,17 @@ export default function Products() {
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <div className="text-center">
-              <Loader2 className="w-12 h-12 animate-spin text-blue-600 mx-auto mb-4" />
-              <p className="text-gray-600">Loading awesome products...</p>
+              <Loader2 className="w-12 h-12 animate-spin text-primary mx-auto mb-4" />
+              <p className="text-base-content/70">Loading awesome products...</p>
             </div>
           </div>
         ) : filteredProducts.length === 0 ? (
           <div className="text-center py-20">
-            <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+            <Package className="w-16 h-16 text-base-content/40 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-base-content mb-2">
               No products found
             </h3>
-            <p className="text-gray-600 mb-6">
+            <p className="text-base-content/70 mb-6">
               Try adjusting your search or filter criteria
             </p>
             <button
@@ -333,22 +329,66 @@ export default function Products() {
                 setSearchTerm("");
                 setFilterCategory("all");
               }}
-              className="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors duration-200"
+              className="bg-primary text-primary-content px-6 py-3 rounded-xl hover:bg-primary/90 transition-colors duration-200"
             >
               Clear Filters
             </button>
           </div>
         ) : (
-          <div
-            className={
-              viewMode === "grid"
-                ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-                : "space-y-4"
-            }
-          >
-            {filteredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
+          <>
+            <div className="mb-4 text-sm text-base-content/60">
+              Showing {Math.min(filteredProducts.length, startIndex + 1)}-
+              {Math.min(filteredProducts.length, startIndex + productsPerPage)} of{" "}
+              {filteredProducts.length} products
+            </div>
+            <div
+              className={
+                viewMode === "grid"
+                  ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+                  : "space-y-4"
+              }
+            >
+              {currentProducts.map((product, index) => (
+                <ProductCard key={index} product={product} />
+              ))}
+            </div>
+          </>
+        )}
+        
+        {/* Pagination Controls */}
+        {filteredProducts.length > productsPerPage && (
+          <div className="flex justify-center items-center gap-4 mt-8">
+            <button
+              onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+              disabled={currentPage === 1}
+              className="px-4 py-2 rounded-lg border border-base-300 text-base-content bg-base-100 hover:bg-base-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+            >
+              Previous
+            </button>
+
+            <div className="md:flex hidden items-center gap-2">
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`w-10 h-10 rounded-lg transition-colors duration-200 ${
+                    currentPage === page
+                      ? "bg-primary text-primary-content"
+                      : "border border-base-300 text-base-content bg-base-100 hover:bg-base-200"
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+            </div>
+
+            <button
+              onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="px-4 py-2 rounded-lg border border-base-300 text-base-content bg-base-100 hover:bg-base-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+            >
+              Next
+            </button>
           </div>
         )}
       </div>

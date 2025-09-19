@@ -17,7 +17,7 @@ export default function product() {
   const [likedProducts, setLikedProducts] = useState(new Set());
   const [isVisible, setIsVisible] = useState(false);
   const [product, setProducts] = useState([])
-  console.log(product)
+
 
 
   // // Featured Products Data

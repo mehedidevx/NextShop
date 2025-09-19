@@ -17,6 +17,7 @@ import { signOut, useSession } from "next-auth/react";
 import ThemeToggle from "../DarkMode/ThemeToggle";
 
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 
 
@@ -79,11 +80,11 @@ export default function Navbar() {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex space-x-1 items-center">
-            {navItems.map((item) => {
+            {navItems.map((item, index) => {
               const isActive = pathname === item.href;
               return (
-                <a
-                  key={item.name}
+                <Link
+                  key={index}
                   href={item.href}
                   className={`px-4 py-2 rounded-full font-medium transition-all duration-300 hover:scale-105 relative overflow-hidden group
                     ${
@@ -93,7 +94,7 @@ export default function Navbar() {
                     }`}
                 >
                   <span className="relative z-10">{item.name}</span>
-                </a>
+                </Link>
               );
             })}
           </div>
