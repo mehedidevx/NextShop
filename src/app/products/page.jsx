@@ -12,6 +12,7 @@ import {
   Loader2,
   Package,
 } from "lucide-react";
+import Link from "next/link";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
@@ -147,16 +148,12 @@ export default function Products() {
           >
             <Heart className="w-4 h-4" />
           </button>
-          <button className="p-2 rounded-full bg-base-100/80 backdrop-blur-sm text-base-content hover:bg-neutral hover:text-neutral-content transition-colors duration-200">
+          <Link href={`/products/${product._id}`} className="p-2 rounded-full bg-base-100/80 backdrop-blur-sm text-base-content hover:bg-neutral hover:text-neutral-content transition-colors duration-200">
             <Eye className="w-4 h-4" />
-          </button>
+          </Link>
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <button className="w-full bg-base-100 text-base-content py-2 px-4 rounded-lg font-medium hover:bg-base-200 transition-colors duration-200 flex items-center justify-center gap-2">
-            View Details
-          </button>
-        </div>
+       
       </div>
 
       <div className="card-body p-4 flex-grow flex flex-col justify-between">

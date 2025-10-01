@@ -19,19 +19,24 @@ import ThemeToggle from "../DarkMode/ThemeToggle";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
-
-
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  const [mobileUserDropdownOpen, setMobileUserDropdownOpen] = useState(false);
   const [cartCount, setCartCount] = useState(7);
   const [wishlistCount, setWishlistCount] = useState(3);
   const pathname = usePathname();
   const dropdownRef = useRef(null);
+  const mobileDropdownRef = useRef(null);
   const { data: session, status } = useSession();
 
-  const handleLogout = () => signOut();
+  const handleLogout = () => {
+    signOut();
+    setUserDropdownOpen(false);
+    setMobileUserDropdownOpen(false);
+    setIsOpen(false);
+  };
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
@@ -39,6 +44,7 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Handle click outside for desktop dropdown
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -49,12 +55,36 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Handle click outside for mobile dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (mobileDropdownRef.current && !mobileDropdownRef.current.contains(event.target)) {
+        setMobileUserDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsOpen(false);
+    setUserDropdownOpen(false);
+    setMobileUserDropdownOpen(false);
+  }, [pathname]);
+
   const navItems = [
     { name: "Home", href: "/" },
     { name: "Products", href: "/products" },
     { name: "About", href: "/about" },
     { name: "Contact", href: "/contact" },
   ];
+
+  const handleMobileProfileClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setMobileUserDropdownOpen(!mobileUserDropdownOpen);
+  };
 
   return (
     <nav
@@ -68,14 +98,14 @@ export default function Navbar() {
         <div className="flex justify-between h-16 items-center">
           {/* Logo */}
           <div className="flex-shrink-0 group">
-            <a href="/" className="flex items-center space-x-3">
+            <Link href="/" className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-lg transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
                 <ShoppingBag className="w-6 h-6 text-primary-content" />
               </div>
               <span className="text-2xl font-bold transition-colors duration-300 text-base-content">
                 NextShop
               </span>
-            </a>
+            </Link>
           </div>
 
           {/* Desktop Menu */}
@@ -99,13 +129,13 @@ export default function Navbar() {
             })}
           </div>
 
-          {/* Right Side */}
+          {/* Right Side - Desktop */}
           <div className="hidden md:flex items-center space-x-4">
             {status === "authenticated" ? (
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                  className="flex items-center space-x-3 p-1 cursor-pointer rounded-full transition-all duration-300 hover:scale-105 group bg-base-200 hover:bg-base-300"
+                  className="flex items-center space-x-3 p-2 cursor-pointer rounded-full transition-all duration-300 hover:scale-105 group bg-base-200 hover:bg-base-300"
                 >
                   <div className="relative">
                     <img
@@ -118,11 +148,12 @@ export default function Navbar() {
                  
                 </button>
 
+                {/* Desktop Dropdown */}
                 <div
                   className={`absolute right-0 mt-2 w-64 bg-base-100 rounded-2xl shadow-xl border border-base-300 backdrop-blur-md transition-all duration-300 transform origin-top-right ${
                     userDropdownOpen
-                      ? "opacity-100 scale-100 translate-y-0"
-                      : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
+                      ? "opacity-100 scale-100 translate-y-0 visible"
+                      : "opacity-0 scale-95 -translate-y-2 invisible"
                   }`}
                 >
                   {/* User Info */}
@@ -134,14 +165,14 @@ export default function Navbar() {
                         className="w-12 h-12 rounded-full object-cover border-2 border-primary"
                       />
                       <div>
-                        <p className="font-semibold text-base-content">
+                        <p className="font-semibold text-base-content truncate">
                           {session.user.name}
                         </p>
-                        <p className="text-sm text-base-content opacity-70">
+                        <p className="text-sm text-base-content opacity-70 truncate">
                           {session.user.email}
                         </p>
                         <span className="inline-block px-2 py-1 bg-primary text-primary-content text-xs rounded-full mt-1 capitalize">
-                          {session.user.role}
+                          {session.user.role || 'User'}
                         </span>
                       </div>
                     </div>
@@ -149,16 +180,18 @@ export default function Navbar() {
 
                   {/* Menu Items */}
                   <div className="py-2">
-                    <a
+                    <Link
                       href="/myProfile"
-                      className="flex items-center px-4 py-3 text-base-content hover:bg-primary hover:text-primary-content rounded-lg transition-colors duration-200"
+                      className="flex items-center px-4 py-3 text-base-content hover:bg-primary hover:text-primary-content rounded-lg mx-2 transition-colors duration-200"
+                      onClick={() => setUserDropdownOpen(false)}
                     >
                       <UserCircle className="w-5 h-5 mr-3" />
                       <span className="font-medium">My Profile</span>
-                    </a>
-                    <a
+                    </Link>
+                    <Link
                       href="/dashboard"
-                      className="flex items-center px-4 py-3 text-base-content hover:bg-primary hover:text-primary-content rounded-lg transition-colors duration-200"
+                      className="flex items-center px-4 py-3 text-base-content hover:bg-primary hover:text-primary-content rounded-lg mx-2 transition-colors duration-200"
+                      onClick={() => setUserDropdownOpen(false)}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -171,13 +204,13 @@ export default function Navbar() {
                           strokeLinecap="round"
                           strokeLinejoin="round"
                           strokeWidth={2}
-                          d="M3 3h18v18H3V3z M7 7h10v10H7V7z"
+                          d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2 2v0"
                         />
                       </svg>
                       <span className="font-medium">Dashboard</span>
-                    </a>
+                    </Link>
 
-                    <div className="border-t border-base-300 mt-2 pt-2">
+                    <div className="border-t border-base-300 mt-2 pt-2 mx-2">
                       <button
                         onClick={handleLogout}
                         className="w-full flex items-center px-4 py-3 text-error hover:bg-error hover:text-error-content rounded-lg transition-colors duration-200"
@@ -190,30 +223,111 @@ export default function Navbar() {
                 </div>
               </div>
             ) : (
-              <a
+              <Link
                 href="/auth/login"
                 className="px-6 py-2.5 bg-primary text-primary-content font-semibold rounded-full hover:bg-primary-focus transition-all duration-300 transform hover:scale-105 flex items-center space-x-2"
               >
                 <User className="w-4 h-4" />
                 <span>Login</span>
-              </a>
+              </Link>
             )}
             <ThemeToggle />
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center space-x-2">
-            <ThemeToggle></ThemeToggle>
+          {/* Mobile Menu Button & Profile */}
+          <div className="md:hidden flex items-center justify-center gap-3">
+            <ThemeToggle />
 
-            {status === "authenticated" && (
-              <button className="p-1 rounded-full">
-                <img
-                  src={session.user.photoURL || "/default-avatar.png"}
-                  alt={session.user.name}
-                  className="w-8 h-8 rounded-full object-cover border-2 border-primary"
-                />
-              </button>
+           <div className=" flex items-center justify-center">
+             {status === "authenticated" && (
+              <div className="relative flex justify-center items-center" ref={mobileDropdownRef}>
+                <button 
+                  onClick={handleMobileProfileClick}
+                  className="p-1 rounded-full hover:bg-base-200 transition-colors duration-200"
+                >
+                  <img
+                    src={session.user.photoURL || "/default-avatar.png"}
+                    alt={session.user.name}
+                    className="w-8 h-8 rounded-full object-cover border-2 border-primary"
+                  />
+                </button>
+
+                {/* Mobile Profile Dropdown */}
+                <div
+                  className={`absolute top-12 right-0  w-64 bg-base-100 rounded-2xl shadow-xl border border-base-300 backdrop-blur-md transition-all duration-300 transform origin-top-right z-50 ${
+                    mobileUserDropdownOpen
+                      ? "opacity-100 scale-100 translate-y-0 visible"
+                      : "opacity-0 scale-95 -translate-y-2 invisible"
+                  }`}
+                >
+                  {/* User Info */}
+                  <div className="px-4 py-4 border-b border-base-300">
+                    <div className="flex items-center space-x-3">
+                      <img
+                        src={session.user.photoURL || "/default-avatar.png"}
+                        alt={session.user.name}
+                        className="w-12 h-12 rounded-full object-cover border-2 border-primary"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-base-content truncate">
+                          {session.user.name}
+                        </p>
+                        <p className="text-sm text-base-content opacity-70 truncate">
+                          {session.user.email}
+                        </p>
+                        <span className="inline-block px-2 py-1 bg-primary text-primary-content text-xs rounded-full mt-1 capitalize">
+                          {session.user.role || 'User'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Menu Items */}
+                  <div className="py-2">
+                    <Link
+                      href="/myProfile"
+                      className="flex items-center px-4 py-3 text-base-content hover:bg-primary hover:text-primary-content rounded-lg mx-2 transition-colors duration-200"
+                      onClick={() => setMobileUserDropdownOpen(false)}
+                    >
+                      <UserCircle className="w-5 h-5 mr-3" />
+                      <span className="font-medium">My Profile</span>
+                    </Link>
+                    <Link
+                      href="/dashboard"
+                      className="flex items-center px-4 py-3 text-base-content hover:bg-primary hover:text-primary-content rounded-lg mx-2 transition-colors duration-200"
+                      onClick={() => setMobileUserDropdownOpen(false)}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-5 h-5 mr-3"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M3 7v10a2 2 0 002 2h14a2 2 0 002 2H5a2 2 0 00-2-2V9a2 2 0 00-2-2H5a2 2 0 00-2 2v0"
+                        />
+                      </svg>
+                      <span className="font-medium">Dashboard</span>
+                    </Link>
+
+                    <div className="border-t border-base-300 mt-2 pt-2 mx-2">
+                      <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center px-4 py-3 text-error hover:bg-error hover:text-error-content rounded-lg transition-colors duration-200"
+                      >
+                        <LogOut className="w-5 h-5 mr-3" />
+                        <span className="font-medium">Sign Out</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             )}
+           </div>
 
             <button
               onClick={() => setIsOpen(!isOpen)}
@@ -227,36 +341,30 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       <div
-        className={`md:hidden transition-all duration-300 ease-in-out ${
-          isOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0 overflow-hidden"
+        className={`md:hidden transition-all duration-300 ease-in-out overflow-hidden ${
+          isOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
         }`}
       >
         <div className="bg-base-100 backdrop-blur-md border-t border-base-300">
           <div className="px-4 pt-4 pb-6 space-y-3">
-            {status === "authenticated" && (
-              <div className="flex items-center space-x-3 p-4 rounded-xl border border-primary bg-primary/10">
-                <img
-                  src={session.user.photoURL || "/default-avatar.png"}
-                  alt={session.user.name}
-                  className="w-12 h-12 rounded-full object-cover border-2 border-primary"
-                />
-                <div>
-                  <p className="font-semibold text-base-content">{session.user.name}</p>
-                  <p className="text-sm text-base-content opacity-70">{session.user.email}</p>
-                </div>
-              </div>
-            )}
-
-            {navItems.map((item, index) => (
-              <a
-                key={item.name}
-                href={item.href}
-                className="block px-4 py-3 rounded-xl text-base-content hover:bg-primary hover:text-primary-content font-medium transition-all duration-300"
-                style={{ animationDelay: `${index * 50}ms` }}
-              >
-                {item.name}
-              </a>
-            ))}
+            {navItems.map((item, index) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`block px-4 py-3 rounded-xl font-medium transition-all duration-300 ${
+                    isActive
+                      ? "bg-primary text-primary-content"
+                      : "text-base-content hover:bg-primary hover:text-primary-content"
+                  }`}
+                  style={{ animationDelay: `${index * 50}ms` }}
+                  onClick={() => setIsOpen(false)}
+                >
+                  {item.name}
+                </Link>
+              );
+            })}
 
             <div className="pt-4 space-y-3 border-t border-base-300">
               {status === "authenticated" ? (
@@ -268,13 +376,14 @@ export default function Navbar() {
                   <span>Sign Out</span>
                 </button>
               ) : (
-                <a
+                <Link
                   href="/auth/login"
                   className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-primary text-primary-content font-semibold rounded-xl transition-all duration-200 hover:scale-[1.02]"
+                  onClick={() => setIsOpen(false)}
                 >
                   <User className="w-4 h-4" />
                   <span>Login / Register</span>
-                </a>
+                </Link>
               )}
             </div>
           </div>

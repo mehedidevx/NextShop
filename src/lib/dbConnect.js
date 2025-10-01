@@ -7,6 +7,7 @@ export const collectionName = {
 
 let client;
 let clientPromise;
+let db;
 
 if (!process.env.NEXT_PUBLIC_MONGODB_URL) {
   throw new Error("Please add your MongoDB URI to .env");
@@ -14,21 +15,39 @@ if (!process.env.NEXT_PUBLIC_MONGODB_URL) {
 
 const uri = process.env.NEXT_PUBLIC_MONGODB_URL;
 
-if (process.env.NODE_ENV === "development") {
-  // Dev: use global variable to avoid multiple connections
-  if (!global._mongoClientPromise) {
-    client = new MongoClient(uri, { serverApi: { version: ServerApiVersion.v1 } });
-    global._mongoClientPromise = client.connect();
+// Initialize connection once
+if (!clientPromise) {
+  client = new MongoClient(uri, { 
+    serverApi: { 
+      version: ServerApiVersion.v1,
+      strict: true,
+      deprecationErrors: true 
+    } 
+  });
+  
+  clientPromise = client.connect().then((client) => {
+    db = client.db(process.env.DB_NAME);
+    return db;
+  });
+
+  // For development, cache the connection
+  if (process.env.NODE_ENV === "development") {
+    global._mongoClientPromise = clientPromise;
   }
-  clientPromise = global._mongoClientPromise;
-} else {
-  // Prod: new connection
-  client = new MongoClient(uri, { serverApi: { version: ServerApiVersion.v1 } });
-  clientPromise = client.connect();
 }
 
-export default async function dbConnect(collection) {
-  const client = await clientPromise;
-  const db = client.db(process.env.DB_NAME);
-  return db.collection(collection);
+export default async function dbConnect() {
+  try {
+    const database = await clientPromise;
+    return database;
+  } catch (error) {
+    console.error("Database connection error:", error);
+    throw error;
+  }
+}
+
+// Specific collection এর জন্য helper function
+export async function getCollection(collectionName) {
+  const db = await dbConnect();
+  return db.collection(collectionName);
 }
